@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Denario",
+    "name": "denario",
     "slug": "denario",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,17 +20,16 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.kyrixel.denario"
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "0638d5fe-d0fe-4426-a677-5cb7fdc85ef5"
+        "projectId": "7b788120-a096-4b81-8ed1-593014185999"
       }
     },
-    "owner": "denario_proj"
+    "owner": "crypto_wallet"
   }
 }

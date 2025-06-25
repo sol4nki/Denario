@@ -1,30 +1,20 @@
-// import logo from './logo.svg';
-import './Money.css';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
 
-
-function Money({ total = 0.001, change = 0.001, changePercentage = 0.001, DecInc = "+" }) {
-return (
-    <view className='main'>
-    <view className='Total'>
-        <p >${total}</p>
-    </view>
-    <view className='bottomContainer'>
-        <view className='left'>
-            <p>{DecInc}{change}</p>
-        </view>
-
-        <view className='filler'>
-            
-        </view>
-
-        <view className='right'>
-            <p>{DecInc}{changePercentage}%</p>
-
-        </view>
-    </view>
-    </view>
-    
-);
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <Text>Open up App.js to start working on your app!</Text>
+      <StatusBar style="auto" />
+    </View>
+  );
 }
 
-export default Money;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
