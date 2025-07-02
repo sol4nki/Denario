@@ -113,12 +113,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   content: {
-    paddingHorizontal: Spacing.giant,
+    // paddingHorizontal: Spacing.giant,
+    paddingHorizontal: '5%',
     marginTop: 260,
+    alignItems: 'stretch',
   },
   title: {
     ...CommonStyles.title,
-    fontSize: FontSizes.xl,
+    fontSize: FontSizes.xxl,
     marginBottom: Spacing.md,
   },
   subtitle: {
@@ -134,6 +136,10 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: FontSizes.md,
     marginBottom: Spacing.xl,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    width: '100%',
+    alignSelf: 'stretch',
   },
   termsContainer: {
     flexDirection: 'row',
@@ -172,16 +178,22 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     marginBottom: Spacing.xxl,
+    width: '100%',
+    alignSelf: 'stretch',
   },
   buttonContent: {
     backgroundColor: Colors.accent,
     paddingVertical: Spacing.xl,
     alignItems: 'center',
+    borderRadius: 12,
+    width: '100%',
   },
   continueButtonText: {
     color: Colors.white,
     fontSize: FontSizes.md,
     fontWeight: FontWeights.semiBold,
+    textAlign: 'center',
+    flexShrink: 1,
   },
   disabledButton: {
     opacity: 0.5,

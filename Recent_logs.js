@@ -6,8 +6,11 @@ import {
   ScrollView,
   TouchableOpacity,
   StatusBar,
+  SafeAreaView,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+
+import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from './styles/theme';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 
 const loginAttempts = [
   { name: "Token 1", abb: "BUNK", price: "$0.00123", change: "+17.324%" },
@@ -28,40 +31,51 @@ const purchaseHistory = [
 
 // Reusable TopBar Component
 const TopBar = ({ title = "Title", onBackPress, onSettingsPress }) => (
-  <View style={styles.topBar}>
+  <View style={styles.header}>
     <TouchableOpacity
       activeOpacity={0.6}
-      style={styles.topBarSideButton}
+      style={styles.headerButton}
       onPress={onBackPress}
     >
-      <Ionicons name="arrow-back-outline" size={24} color="#FFF" />
+      <Ionicons name="arrow-back-outline" size={24} color={Colors.white} />
     </TouchableOpacity>
-
-    <Text style={styles.topBarTitle}>{title}</Text>
-
+    <Text style={styles.headerTitle}>{title}</Text>
     <TouchableOpacity
       activeOpacity={0.6}
-      style={styles.topBarSideButton}
+      style={styles.headerButton}
       onPress={onSettingsPress}
     >
-      <Ionicons name="settings-outline" size={24} color="#FFF" />
+      <Ionicons name="settings-outline" size={24} color={Colors.white} />
     </TouchableOpacity>
   </View>
 );
 
-export default function App() {
+export default function RecentLogs() {
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" backgroundColor="#0D0A19" />
-      <TopBar
+    <SafeAreaView style={CommonStyles.container}>
+      <StatusBar barStyle="light-content" backgroundColor={Colors.background} />
+      {/* <TopBar
         title="Logs"
         onBackPress={() => console.log("Back pressed")}
         onSettingsPress={() => console.log("Settings pressed")}
-      />
+        
+      /> */}
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.headerButton} onPress={() => console.log("hamburg menu pressed")}>
+          <Ionicons name="menu" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Activity</Text>
+        <View style={styles.headerRight}>
+          <TouchableOpacity style={styles.headerButton} onPress={() => console.log("search menu pressed")}>
+            <Ionicons name="search" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
+      </View>
 
       {/* Login Attempts Section */}
       <View style={styles.section}>
-        <View style={styles.headerRow}>
+        <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Login attempts</Text>
           <TouchableOpacity activeOpacity={0.6} onPress={() => console.log('See more pressed')}>
             <Text style={styles.seeMore}>See more</Text>
@@ -86,7 +100,7 @@ export default function App() {
                 <Text
                   style={[
                     styles.change,
-                    { color: item.change.includes('-') ? 'red' : '#00FF9D' },
+                    { color: item.change.includes('-') ? Colors.green : Colors.accent },
                   ]}
                 >
                   {item.change}
@@ -99,7 +113,7 @@ export default function App() {
 
       {/* Purchase History Section */}
       <View style={styles.section}>
-        <View style={styles.headerRow}>
+        <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Purchase History</Text>
           <TouchableOpacity activeOpacity={0.6} onPress={() => console.log('See more pressed')}>
             <Text style={styles.seeMore}>See more</Text>
@@ -123,105 +137,146 @@ export default function App() {
           ))}
         </ScrollView>
       </View>
-    </View>
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        <TouchableOpacity style={styles.navItem} onPress={() => console.log("Home pressed")}>
+          <Ionicons name="home" size={24} color="#6B7280" />
+          <Text style={[styles.navLabel, { color: '#6B7280' }]}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem} onPress={() => console.log("Swap pressed")}>
+          <FontAwesome5 name="exchange-alt" size={20} color="#6B7280" />
+          <Text style={styles.navLabel}>Swap</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem} onPress={() => console.log("Activity pressed")}>
+          <Ionicons name="time" size={24} color="#7B68EE" />
+          <Text style={[styles.navLabel, { color: '#7B68EE' }]}>Activity</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem} onPress={() => console.log("More info pressed")}>
+          <Ionicons name="card" size={24} color="#6B7280" />
+          <Text style={styles.navLabel}>More</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#0D0A19',
-    flex: 1,
-    paddingTop: 0,
-  },
-  topBar: {
-    height: 80,
-    backgroundColor: '#16112B',
-    borderBottomWidth: 1,
-    borderBottomColor: '#29273A',
+  header: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingTop: 30,
-    marginBottom: 16,
+    alignItems: 'center',
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.xl,
+    backgroundColor: Colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
+    marginBottom: 20,
   },
-  topBarTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+  headerButton: {
+    padding: Spacing.sm,
   },
-  topBarSideButton: {
-    padding: 4,
+  headerTitle: {
+    fontSize: FontSizes.xl,
+    fontWeight: FontWeights.bold,
+    color: Colors.white,
   },
   section: {
-    marginBottom: 32,
+    marginBottom: Spacing.massive,
   },
-  headerRow: {
+  sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 12,
-    paddingHorizontal: 16,
+    alignItems: 'center',
+    marginBottom: Spacing.lg,
+    paddingHorizontal: Spacing.xl,
   },
   sectionTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    color: Colors.white,
+    fontSize: FontSizes.lg,
+    fontWeight: FontWeights.bold,
   },
   seeMore: {
-    color: '#6C63FF',
-    fontSize: 14,
+    color: Colors.accent,
+    fontSize: FontSizes.base,
+    fontWeight: FontWeights.medium,
   },
   sectionScroll: {
     maxHeight: 220,
     paddingRight: 4,
-    paddingHorizontal: 16,
+    paddingHorizontal: Spacing.xl,
   },
   card: {
-    backgroundColor: '#1C172E',
+    backgroundColor: Colors.cardBackground,
     borderRadius: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
-    borderColor: '#4A42E0',
+    padding: Spacing.lg,
+    borderColor: Colors.border,
     borderWidth: 1,
-    marginBottom: 10,
+    marginBottom: Spacing.md,
   },
   simpleCard: {
-    backgroundColor: '#1C172E',
+    backgroundColor: Colors.cardBackground,
     borderRadius: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
-    marginBottom: 10,
+    padding: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   iconCircle: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#D85EF3',
-    marginRight: 12,
+    backgroundColor: Colors.accent + '20',
+    marginRight: Spacing.lg,
   },
   cardTextContainer: {
     flex: 1,
   },
   cardTitle: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '600',
+    color: Colors.white,
+    fontSize: FontSizes.md,
+    fontWeight: FontWeights.semiBold,
+    marginBottom: 2,
   },
   cardSubtitle: {
-    color: '#A0A0A0',
-    fontSize: 13,
+    color: Colors.gray,
+    fontSize: FontSizes.base,
   },
   rightText: {
     alignItems: 'flex-end',
   },
   price: {
-    color: '#FFFFFF',
-    fontSize: 14,
+    color: Colors.white,
+    fontSize: FontSizes.base,
+    fontWeight: FontWeights.semiBold,
   },
   change: {
-    fontSize: 13,
-    fontWeight: 'bold',
+    fontSize: FontSizes.sm,
+    fontWeight: FontWeights.medium,
+  },
+  bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    backgroundColor: '#16112B',
+    paddingVertical: 12,
+    paddingBottom: 25,
+    borderTopWidth: 1,
+    borderTopColor: '#2C1E51',
+  },
+  navItem: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  navLabel: {
+    fontSize: 11,
+    color: '#6B7280',
+    marginTop: 4,
+    fontWeight: '500',
   },
 });

@@ -80,12 +80,12 @@ const styles = StyleSheet.create({
   gradient: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.xl,
-  },
+  // header: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'flex-end',
+  //   paddingHorizontal: Spacing.xl,
+  //   paddingTop: Spacing.xl,
+  // },
 
   logoContainer: {
     alignItems: 'center',
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   welcomeContainer: {
     alignItems: 'center',
-    paddingHorizontal: Spacing.giant,
+    // paddingHorizontal: Spacing.giant,
     marginBottom: Spacing.massive * 2 + Spacing.xl,
   },
   welcomeTitle: {
@@ -114,41 +114,61 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   buttonContainer: {
-    paddingHorizontal: Spacing.giant,
+    // paddingHorizontal: Spacing.giant,
+    paddingHorizontal: '5%',
     gap: Spacing.xl,
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    marginBottom: Spacing.xl,
   },
   button: {
     ...CommonStyles.button,
+    borderRadius: 12,
+    marginBottom: Spacing.sm * 2,
+    width: '100%',
+    alignSelf: 'stretch',
+    paddingVertical: Spacing.xl,
+    paddingHorizontal: 0,
   },
   signupButton: {
-    marginBottom: Spacing.sm * 2,
+    marginBottom: 0,
   },
   buttonGradient: {
-    paddingVertical: Spacing.xl,
-    paddingHorizontal: Spacing.xl + Spacing.md,
+    paddingVertical: 0,
+    paddingHorizontal: 0,
     alignItems: 'center',
+    borderRadius: 12,
+    width: '100%',
   },
   buttonText: {
     color: Colors.white,
     fontSize: FontSizes.md,
     fontWeight: FontWeights.semiBold,
+    textAlign: 'center',
+    flexShrink: 1,
   },
   loginButton: {
+    backgroundColor: 'none',
     borderWidth: 1,
     borderColor: Colors.accent,
     paddingVertical: Spacing.xl,
-    paddingHorizontal: Spacing.xl + Spacing.md,
+    paddingHorizontal: 0,
     alignItems: 'center',
+    borderRadius: 12,
+    width: '100%',
+    alignSelf: 'stretch',
   },
   loginButtonText: {
     color: Colors.gray,
     fontSize: FontSizes.md,
     fontWeight: FontWeights.semiBold,
+    textAlign: 'center',
+    flexShrink: 1,
   },
   footer: {
     flex: 1,
     justifyContent: 'flex-end',
-    paddingHorizontal: Spacing.giant,
+    // paddingHorizontal: Spacing.giant,
     paddingBottom: Spacing.giant,
   },
   footerText: {

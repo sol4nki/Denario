@@ -211,7 +211,7 @@ const SearchHeader = ({ searchQuery, setSearchQuery, onCancel }) => {
             onChangeText={setSearchQuery}
             autoFocus={true}
             selectionColor="#7B68EE"
-            keyboardAppearance="dark"
+            
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity

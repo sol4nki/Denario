@@ -5,11 +5,15 @@ import { registerRootComponent } from 'expo';
 // import App from './App';
 // import Welcome from './welcome/Welcome';
 // import Miscellaneous from './MiscPage/miscMain';
-import App from './Recent_logs';
+// import Biometric from './Biometric';
+import TradeSwap from './TradeSwap';
+// import RecentLogs from './Recent_logs';
+// import Miscellaneous from './MiscPage/miscMain';
+// import CoinDetails from './CoinDetails/coinDetails';
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
 // the environment is set up appropriately
 
-registerRootComponent(App);
+registerRootComponent(TradeSwap);
 

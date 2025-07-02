@@ -11,56 +11,58 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import Svg, { Path } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
+import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from './styles/theme';
 
-export default function App() {
+export default function Biometric() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const handleScanPress = () => setIsModalVisible(true);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="light" backgroundColor="#0D0A19" />
+    <SafeAreaView style={CommonStyles.container}>
+      <StatusBar style="light" backgroundColor={Colors.background} />
 
-      {/* Top Bar */}
-      <View style={styles.topBar}>
+      {/* Header */}
+      <View style={styles.header}>
         <TouchableOpacity
           activeOpacity={0.6}
-          style={styles.topBarSideButton}
+          style={styles.headerButton}
           onPress={() => console.log('Back pressed')}
         >
-          <Ionicons name="arrow-back-outline" size={24} color="#FFF" />
+          <Ionicons name="arrow-back-outline" size={24} color={Colors.white} />
         </TouchableOpacity>
 
-        <Text style={styles.topBarTitle}>Biometric Scan</Text>
+        <Text style={styles.headerTitle}>Biometric Scan</Text>
 
         <TouchableOpacity
           activeOpacity={0.6}
-          style={styles.topBarSideButton}
+          style={styles.headerButton}
           onPress={() => console.log('Settings pressed')}
         >
-          <Ionicons name="settings-outline" size={24} color="#FFF" />
+          <Ionicons name="settings-outline" size={24} color={Colors.white} />
         </TouchableOpacity>
       </View>
 
-      {/* Scan Section */}
-      <View style={styles.mainContent}>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          style={styles.scanButton}
-          onPress={handleScanPress}
-        >
-          <SvgComponent />
-        </TouchableOpacity>
-
-        <Text style={styles.scanText}>Tap to Scan</Text>
-
-        {/* Modal View */}
-        <Modal visible={isModalVisible} animationType="slide" transparent={false}>
-          <View style={styles.modalView}>
-            <Text style={{ fontSize: 20, marginBottom: 20 }}>Camera dekho friends</Text>
-            <Button title="Close Modal" onPress={() => setIsModalVisible(false)} />
-          </View>
-        </Modal>
+      {/* Main Card Section */}
+      <View style={styles.cardSection}>
+        <View style={styles.card}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.scanButton}
+            onPress={handleScanPress}
+          >
+            <SvgComponent />
+          </TouchableOpacity>
+          <Text style={styles.scanText}>Tap to Scan</Text>
+        </View>
       </View>
+
+      {/* Modal View */}
+      <Modal visible={isModalVisible} animationType="slide" transparent={false}>
+        <View style={styles.modalView}>
+          <Text style={{ fontSize: FontSizes.lg, marginBottom: Spacing.xl }}>Camera dekho friends</Text>
+          <Button title="Close Modal" onPress={() => setIsModalVisible(false)} />
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -85,47 +87,59 @@ function SvgComponent(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0D0A19',
-  },
-  topBar: {
-    height: 80,
-    backgroundColor: '#16112B',
-    borderBottomWidth: 1,
-    borderBottomColor: '#29273A',
+  header: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingTop: 30,
+    alignItems: 'center',
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.xl,
+    backgroundColor: Colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
   },
-  topBarTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+  headerButton: {
+    padding: Spacing.sm,
   },
-  topBarSideButton: {
-    padding: 4,
+  headerTitle: {
+    fontSize: FontSizes.xl,
+    fontWeight: FontWeights.bold,
+    color: Colors.white,
   },
-  mainContent: {
+  cardSection: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: Spacing.xl,
+  },
+  card: {
+    backgroundColor: Colors.cardBackground,
+    borderRadius: 20,
+    padding: Spacing.massive,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.border,
+    width: '100%',
+    maxWidth: 350,
+    shadowColor: Colors.background,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
   },
   scanButton: {
-    padding:10,
-    marginBottom: 20,
-    marginVertical:-175
+    padding: Spacing.xl,
+    marginBottom: Spacing.xl,
   },
   scanText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    color: Colors.white,
+    fontSize: FontSizes.md,
     marginTop: 0,
+    fontWeight: FontWeights.medium,
   },
   modalView: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     justifyContent: 'center',
     alignItems: 'center',
   },

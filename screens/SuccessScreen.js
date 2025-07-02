@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     zIndex: 2,
-    paddingHorizontal: Spacing.xl + Spacing.md,
+    // paddingHorizontal: Spacing.xl + Spacing.md,
+    paddingHorizontal: '5%',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -112,17 +113,21 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: Spacing.xxl,
     width: '100%',
+    alignSelf: 'stretch',
   },
   button: {
     backgroundColor: Colors.accent,
     paddingVertical: Spacing.xl,
     alignItems: 'center',
     borderRadius: 12,
+    width: '100%',
   },
   buttonText: {
     color: Colors.white,
     fontSize: FontSizes.md,
     fontWeight: FontWeights.semiBold,
+    textAlign: 'center',
+    flexShrink: 1,
   },
   progressContainer: {
     flexDirection: 'row',
