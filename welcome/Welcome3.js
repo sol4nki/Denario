@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     opacity: 0.9,
   },
   contentContainer: {
-    paddingHorizontal: Spacing.giant,
+    paddingHorizontal: '7%',
     paddingBottom: Spacing.giant,
   },
   title: {

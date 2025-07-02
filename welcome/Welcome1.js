@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentContainer: {
-    paddingHorizontal: Spacing.giant,
+    paddingHorizontal: '7%',
     paddingBottom: Spacing.giant,
     zIndex: 1,
   },

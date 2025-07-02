@@ -79,7 +79,7 @@ export default function TradeSwap() {
                 onPress={onSelectPayToken}
                 activeOpacity={0.7}
               >
-                <Image source={require('./assets/icon.png')} style={styles.tokenIcon} />
+                <Image source={require('../assets/icon.png')} style={styles.tokenIcon} />
                 <Text style={styles.tokenSymbol}>SOL</Text>
                 <Ionicons name="chevron-down" size={16} color={Colors.white} />
               </TouchableOpacity>
@@ -111,7 +111,7 @@ export default function TradeSwap() {
                 onPress={onSelectReceiveToken}
                 activeOpacity={0.7}
               >
-                <Image source={require('./assets/adaptive-icon.png')} style={styles.tokenIcon} />
+                <Image source={require('../assets/adaptive-icon.png')} style={styles.tokenIcon} />
                 <Text style={styles.tokenSymbol}>USDC</Text>
                 <Ionicons name="chevron-down" size={16} color={Colors.white} />
               </TouchableOpacity>
@@ -136,10 +136,7 @@ export default function TradeSwap() {
         ))}
         {/* ─── Disclaimer ─── */}
         <Text style={styles.disclaimerText}>
-          Trending token lists are generated using market data from various third party providers
-          including CoinGecko, Birdeye and Jupiter and based on popular tokens swapped by Phantom
-          users via the Swapper over the stated time period. Past performance is not indicative of
-          future performance.
+          hamburger
         </Text>
       </ScrollView>
       {/* Bottom Navigation */}
