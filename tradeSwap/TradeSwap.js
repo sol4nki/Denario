@@ -12,7 +12,7 @@ import {
   SafeAreaView
 } from 'react-native';
 import { FontAwesome5,Ionicons } from '@expo/vector-icons';
-import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from './styles/theme';
+import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
 
 
 //going to add api for different crypto with the help of ai//

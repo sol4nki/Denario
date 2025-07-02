@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from './styles/theme';
+import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 
 const loginAttempts = [
