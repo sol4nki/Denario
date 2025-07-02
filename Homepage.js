@@ -12,6 +12,7 @@ import {
   FlatList
 } from "react-native";
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from './styles/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -304,24 +305,24 @@ export default function Homepage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0D0A19',
+    backgroundColor: Colors.background,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    paddingBottom: 20,
-    backgroundColor: '#0D0A19',
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.xl,
+    backgroundColor: Colors.background,
   },
   headerButton: {
-    padding: 8,
+    padding: Spacing.sm,
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    fontSize: FontSizes.xl,
+    fontWeight: FontWeights.bold,
+    color: Colors.white,
   },
   headerRight: {
     flexDirection: 'row',
@@ -330,43 +331,43 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   balanceSection: {
-    paddingHorizontal: 20,
-    marginBottom: 30,
+    paddingHorizontal: Spacing.xl,
+    marginBottom: Spacing.massive,
   },
   balanceCard: {
-    backgroundColor: '#16112B',
+    backgroundColor: Colors.cardBackground,
     borderRadius: 20,
-    padding: 25,
+    padding: Spacing.massive,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#2C1E51',
+    borderColor: Colors.border,
   },
   balanceLabel: {
-    fontSize: 14,
-    color: '#9CA3AF',
-    marginBottom: 8,
+    fontSize: FontSizes.base,
+    color: Colors.gray,
+    marginBottom: Spacing.md,
   },
   balanceAmount: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 8,
+    fontSize: FontSizes.xxl,
+    fontWeight: FontWeights.bold,
+    color: Colors.white,
+    marginBottom: Spacing.md,
   },
   balanceChange: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   balanceChangeText: {
-    fontSize: 14,
-    color: '#4ECDC4',
-    marginLeft: 6,
-    fontWeight: '500',
+    fontSize: FontSizes.base,
+    color: Colors.green,
+    marginLeft: Spacing.sm,
+    fontWeight: FontWeights.medium,
   },
   actionsSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    marginBottom: 30,
+    paddingHorizontal: Spacing.xl,
+    marginBottom: Spacing.massive,
   },
   actionButton: {
     flex: 1,
@@ -374,10 +375,11 @@ const styles = StyleSheet.create({
   },
   actionButtonContent: {
     alignItems: 'center',
-    padding: 16,
+    padding: Spacing.lg,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#2C1E51',
+    borderColor: Colors.border,
+    backgroundColor: Colors.cardBackground,
   },
   actionIcon: {
     width: 40,
@@ -385,50 +387,50 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.md,
+    backgroundColor: Colors.accent,
   },
   actionLabel: {
-    fontSize: 12,
-    color: '#FFFFFF',
-    fontWeight: '500',
+    fontSize: FontSizes.sm,
+    color: Colors.white,
+    fontWeight: FontWeights.medium,
   },
   tokenSection: {
-    paddingHorizontal: 20,
+    paddingHorizontal: Spacing.xl,
     marginBottom: 100,
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: Spacing.lg,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    fontSize: FontSizes.lg,
+    fontWeight: FontWeights.bold,
+    color: Colors.white,
   },
   seeAllText: {
-    fontSize: 14,
-    color: '#7B68EE',
-    fontWeight: '500',
+    fontSize: FontSizes.base,
+    color: Colors.accent,
+    fontWeight: FontWeights.medium,
   },
   tokenList: {
-    backgroundColor: '#16112B',
+    backgroundColor: Colors.cardBackground,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#2C1E51',
-    overflow: 'hidden', // optional for rounded corners
+    borderColor: Colors.border,
+    overflow: 'hidden',
   },
-
   separator: {
     height: 1,
-    backgroundColor: '#2C1E51',
+    backgroundColor: Colors.border,
   },
   tokenContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
+    padding: Spacing.lg,
   },
   tokenLeft: {
     flexDirection: 'row',
@@ -441,28 +443,29 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
+    marginRight: Spacing.lg,
+    backgroundColor: Colors.accent + '20',
   },
   tokenInfo: {
     flex: 1,
   },
   tokenName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
+    fontSize: FontSizes.md,
+    fontWeight: FontWeights.semiBold,
+    color: Colors.white,
     marginBottom: 2,
   },
   tokenSymbol: {
-    fontSize: 13,
-    color: '#9CA3AF',
+    fontSize: FontSizes.base,
+    color: Colors.gray,
   },
   tokenRight: {
     alignItems: 'flex-end',
   },
   tokenBalance: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
+    fontSize: FontSizes.md,
+    fontWeight: FontWeights.semiBold,
+    color: Colors.white,
     marginBottom: 2,
   },
   tokenValueRow: {
@@ -470,13 +473,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tokenUsdValue: {
-    fontSize: 13,
-    color: '#9CA3AF',
-    marginRight: 8,
+    fontSize: FontSizes.base,
+    color: Colors.gray,
+    marginRight: Spacing.md,
   },
   tokenChange: {
-    fontSize: 12,
-    fontWeight: '500',
+    fontSize: FontSizes.sm,
+    fontWeight: FontWeights.medium,
   },
   bottomNav: {
     position: 'absolute',
@@ -484,11 +487,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     flexDirection: 'row',
-    backgroundColor: '#16112B',
+    backgroundColor: Colors.cardBackground,
     paddingVertical: 12,
     paddingBottom: 25,
     borderTopWidth: 1,
-    borderTopColor: '#2C1E51',
+    borderTopColor: Colors.border,
   },
   navItem: {
     flex: 1,
@@ -496,10 +499,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   navLabel: {
-    fontSize: 11,
-    color: '#6B7280',
+    fontSize: FontSizes.xs,
+    color: Colors.navInactive,
     marginTop: 4,
-    fontWeight: '500',
+    fontWeight: FontWeights.medium,
   },
 });
 
