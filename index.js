@@ -6,7 +6,7 @@ import { registerRootComponent } from 'expo';
 // import App from './App';
 import Welcome from './welcome/Welcome';
 // import Miscellaneous from './MiscPage/miscMain';
-// import Biometric from './Biometric';
+// import Biometric from './components/Biometric';
 // import TradeSwap from './tradeSwap/TradeSwap';
 // import RecentLogs from './activity/RecentLogs';
 

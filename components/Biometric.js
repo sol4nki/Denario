@@ -7,21 +7,26 @@ import {
   Text,
   Button,
   SafeAreaView,
+  Platform
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Svg, { Path } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
 
+import Constants from 'expo-constants';
+
 export default function Biometric() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const handleScanPress = () => setIsModalVisible(true);
+  const statusBarHeight=Platform.OS==='android' ? Constants.statusBarHeight+8 : 0; 
 
   return (
-    <SafeAreaView style={CommonStyles.container}>
+    <SafeAreaView style={[CommonStyles.container, {paddingTop: statusBarHeight}]}>
       <StatusBar style="light" backgroundColor={Colors.background} />
 
       {/* Header */}
+      
       <View style={styles.header}>
         <TouchableOpacity
           activeOpacity={0.6}

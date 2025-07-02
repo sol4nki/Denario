@@ -12,7 +12,8 @@ import {
   StyleSheet,
   SafeAreaView,
   Dimensions,
-  Image
+  Image,
+  Platform
 } from 'react-native';
 
 import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
@@ -29,12 +30,12 @@ export default function Welcome3({ navigation }){
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 1000,
-        useNativeDriver: true,
+        useNativeDriver: Platform.OS === 'ios',
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 800,
-        useNativeDriver: true,
+        useNativeDriver: Platform.OS === 'ios',
       }),
     ]).start();
 
@@ -44,12 +45,12 @@ export default function Welcome3({ navigation }){
         Animated.timing(buttonScale, {
           toValue: 1.05,
           duration: 1000,
-          useNativeDriver: true,
+          useNativeDriver: Platform.OS === 'ios',
         }),
         Animated.timing(buttonScale, {
           toValue: 1,
           duration: 1000,
-          useNativeDriver: true,
+          useNativeDriver: Platform.OS === 'ios',
         }),
       ])
     ).start();

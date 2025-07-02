@@ -12,7 +12,8 @@ import {
   StyleSheet,
   SafeAreaView,
   Dimensions,
-  Image
+  Image,
+  Platform
   
 } from 'react-native';
 
@@ -31,12 +32,12 @@ export default function Welcome2({ navigation }){
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 1000,
-        useNativeDriver: true,
+        useNativeDriver: Platform.OS === 'ios',
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 800,
-        useNativeDriver: true,
+        useNativeDriver: Platform.OS === 'ios',
       }),
     ]).start();
   }, []);
