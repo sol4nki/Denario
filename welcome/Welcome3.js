@@ -93,15 +93,20 @@ export default function Welcome3({ navigation }){
                 style={styles.getStartedButton}
                 onPress={() => {
                 // Navigate to main app or handle completion
-                console.log('Get Started pressed');
+                navigation.navigate('LoginCompilation');
+
                 }}
             >
                 <Text style={styles.getStartedButtonText}>Get started</Text>
             </TouchableOpacity>
             </Animated.View>
 
-            <TouchableOpacity style={styles.loginContainer}>
-            <Text style={styles.loginText} onPress={() => console.log("login pressed")}>
+            <TouchableOpacity 
+              style={styles.loginContainer} 
+              
+              
+            >
+            <Text style={styles.loginText} onPress={() => navigation.navigate('LoginCompilation')}>
                 Already have an account? <Text style={styles.loginLink}>login</Text>
             </Text>
             </TouchableOpacity>

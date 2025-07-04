@@ -37,7 +37,7 @@ export default function SuccessScreen({ navigation }) {
 
         <TouchableOpacity
           style={styles.continueButton}
-          onPress={() => navigation.navigate('Home')} // or your main app route
+          onPress={() => navigation.navigate('TabNavigator')} // or your main app route
         >
           <View style={styles.button}>
             <Text style={styles.buttonText}>Continue</Text>

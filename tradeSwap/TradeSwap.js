@@ -30,7 +30,7 @@ const Trending = [
   { name: "Trending 11", desc: "same thing" },
 ];
 
-export default function TradeSwap() {
+export default function TradeSwap({ navigation }) {
   const [payAmount, setPayAmount] = useState('');
   const [receiveAmount, setReceiveAmount] = useState('');
 
@@ -41,17 +41,28 @@ export default function TradeSwap() {
   return (
     <SafeAreaView style={CommonStyles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.background} />
+
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.headerButton} onPress={() => console.log("hamburg menu pressed")}> 
-          <Ionicons name="menu" size={24} color={Colors.white} />
+        <TouchableOpacity style={styles.logoButton} onPress={() => navigation.navigate('Activity')}>
+          <View style={styles.logoCircle}>
+            <Image
+              source={require("../assets/main_logo.png")}
+              style={styles.headerLogo}
+              resizeMode="contain"
+            />
+          </View>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Swap</Text>
-        <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.headerButton} onPress={() => console.log("search menu pressed")}> 
-            <Ionicons name="search" size={24} color={Colors.white} />
-          </TouchableOpacity>
-        </View>
+        
+        <TouchableOpacity style={styles.searchButton} onPress={() => console.log("search pressed")}>
+          <Ionicons name="search" size={20} color={Colors.gray} />
+          <Text style={styles.searchPlaceholder}>Search</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.headerButton} onPress={() => navigation.navigate('More')}>
+          <Ionicons name="notifications-outline" size={24} color={Colors.white} />
+          <View style={styles.notificationDot} />
+        </TouchableOpacity>
       </View>
       {/* ─── Scrollable Content ─── */}
       <ScrollView
@@ -139,25 +150,27 @@ export default function TradeSwap() {
           hamburger
         </Text>
       </ScrollView>
-      {/* Bottom Navigation */}
+
+
+      {/* Bottom Navigation
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log("Home pressed")}> 
-          <Ionicons name="home" size={24} color={Colors.navInactive} />
-          <Text style={[styles.navLabel, { color: Colors.navInactive }]}>Home</Text>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Homepage')}>
+          <Ionicons name="home" size={24} color="#6B7280" />
+          <Text style={styles.navLabel}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log("Swap pressed")}> 
-          <FontAwesome5 name="exchange-alt" size={20} color={Colors.accent} />
-          <Text style={[styles.navLabel, { color: Colors.accent }]}>Swap</Text>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('TradeSwap')}>
+          <FontAwesome5 name="exchange-alt" size={20} color="#7B68EE" />
+          <Text style={[styles.navLabel, { color: '#7B68EE' }]}>Swap</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log("Activity pressed")}> 
-          <Ionicons name="time" size={24} color={Colors.navInactive} />
-          <Text style={[styles.navLabel, { color: Colors.navInactive }]}>Activity</Text>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('RecentLogs')}>
+          <Ionicons name="time" size={24} color="#6B7280" />
+          <Text style={styles.navLabel}>Activity</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log("More info pressed")}> 
-          <Ionicons name="card" size={24} color={Colors.navInactive} />
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('MiscMain')}>
+          <Ionicons name="card" size={24} color="#6B7280" />
           <Text style={styles.navLabel}>More</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 }
@@ -313,5 +326,62 @@ const styles = StyleSheet.create({
     color: Colors.navInactive,
     marginTop: 4,
     fontWeight: '500',
+  },
+
+
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.lg,
+    backgroundColor: Colors.background,
+  },
+  logoButton: {
+    padding: Spacing.xs,
+  },
+  logoCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.cardBackground,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerLogo: {
+    width: 24,
+    height: 24,
+  },
+  searchButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.cardBackground,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: 20,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+    marginHorizontal: Spacing.md,
+  },
+  searchPlaceholder: {
+    fontSize: FontSizes.md,
+    color: Colors.gray,
+    marginLeft: Spacing.lg,
+  },
+  headerButton: {
+    padding: Spacing.sm,
+    position: 'relative',
+  },
+  notificationDot: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.accent,
   },
 });

@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   StatusBar,
   SafeAreaView,
+  Image,
+
 } from 'react-native';
 
 import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
@@ -29,28 +31,8 @@ const purchaseHistory = [
   { name: "Purchase 6", desc: "same thing" },
 ];
 
-// Reusable TopBar Component
-const TopBar = ({ title = "Title", onBackPress, onSettingsPress }) => (
-  <View style={styles.header}>
-    <TouchableOpacity
-      activeOpacity={0.6}
-      style={styles.headerButton}
-      onPress={onBackPress}
-    >
-      <Ionicons name="arrow-back-outline" size={24} color={Colors.white} />
-    </TouchableOpacity>
-    <Text style={styles.headerTitle}>{title}</Text>
-    <TouchableOpacity
-      activeOpacity={0.6}
-      style={styles.headerButton}
-      onPress={onSettingsPress}
-    >
-      <Ionicons name="settings-outline" size={24} color={Colors.white} />
-    </TouchableOpacity>
-  </View>
-);
 
-export default function RecentLogs() {
+export default function RecentLogs({ navigation }) {
   return (
     <SafeAreaView style={CommonStyles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.background} />
@@ -62,15 +44,25 @@ export default function RecentLogs() {
       /> */}
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.headerButton} onPress={() => console.log("hamburg menu pressed")}>
-          <Ionicons name="menu" size={24} color="#FFFFFF" />
+        <TouchableOpacity style={styles.logoButton} onPress={() => navigation.navigate('More')}>
+          <View style={styles.logoCircle}>
+            <Image
+              source={require("../assets/main_logo.png")}
+              style={styles.headerLogo}
+              resizeMode="contain"
+            />
+          </View>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Activity</Text>
-        <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.headerButton} onPress={() => console.log("search menu pressed")}>
-            <Ionicons name="search" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
+        
+        <TouchableOpacity style={styles.searchButton} onPress={() => console.log("search pressed")}>
+          <Ionicons name="search" size={20} color={Colors.gray} />
+          <Text style={styles.searchPlaceholder}>Search</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.headerButton} onPress={() => navigation.navigate('Activity')}>
+          <Ionicons name="notifications-outline" size={24} color={Colors.white} />
+          <View style={styles.notificationDot} />
+        </TouchableOpacity>
       </View>
 
       {/* Login Attempts Section */}
@@ -137,25 +129,26 @@ export default function RecentLogs() {
           ))}
         </ScrollView>
       </View>
-      {/* Bottom Navigation */}
+      
+      {/* Bottom Navigation
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log("Home pressed")}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Homepage')}>
           <Ionicons name="home" size={24} color="#6B7280" />
-          <Text style={[styles.navLabel, { color: '#6B7280' }]}>Home</Text>
+          <Text style={styles.navLabel}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log("Swap pressed")}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('TradeSwap')}>
           <FontAwesome5 name="exchange-alt" size={20} color="#6B7280" />
           <Text style={styles.navLabel}>Swap</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log("Activity pressed")}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('RecentLogs')}>
           <Ionicons name="time" size={24} color="#7B68EE" />
           <Text style={[styles.navLabel, { color: '#7B68EE' }]}>Activity</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log("More info pressed")}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('MiscMain')}>
           <Ionicons name="card" size={24} color="#6B7280" />
           <Text style={styles.navLabel}>More</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 }
@@ -182,7 +175,8 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   section: {
-    marginBottom: Spacing.massive,
+    marginVertical: Spacing.xxl,
+    
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -278,5 +272,60 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     marginTop: 4,
     fontWeight: '500',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.lg,
+    backgroundColor: Colors.background,
+  },
+  logoButton: {
+    padding: Spacing.xs,
+  },
+  logoCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.cardBackground,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerLogo: {
+    width: 24,
+    height: 24,
+  },
+  searchButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.cardBackground,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: 20,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+    marginHorizontal: Spacing.md,
+  },
+  searchPlaceholder: {
+    fontSize: FontSizes.md,
+    color: Colors.gray,
+    marginLeft: Spacing.lg,
+  },
+  headerButton: {
+    padding: Spacing.sm,
+    position: 'relative',
+  },
+  notificationDot: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.accent,
   },
 });

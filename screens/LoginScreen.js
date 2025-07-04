@@ -1,74 +1,130 @@
-// screens/LoginScreen.js
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
+  TextInput,
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
   Image,
   Dimensions,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
 
-// import { LinearGradient } from 'expo-linear-gradient';
-
-// const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export default function LoginScreen({ navigation }) {
+  const [walletAddress, setWalletAddress] = useState('');
+  const [recoveryPhrase, setRecoveryPhrase] = useState('');
+  const [showRecoveryPhrase, setShowRecoveryPhrase] = useState(false);
+
+  const handleLogin = () => {
+    if (walletAddress.trim() && recoveryPhrase.trim()) {
+      // Add your wallet login logic here
+      console.log('Wallet Address:', walletAddress);
+      console.log('Recovery Phrase:', recoveryPhrase);
+      
+      // Navigate to wallet dashboard or home screen
+      navigation.navigate('TabNavigator');
+    }
+  };
+
+  const isValidForm = walletAddress.trim() && recoveryPhrase.trim();
+
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        
-        style={styles.gradient}
+      {/* Background Image */}
+      <Image
+        source={require('../assets/fourth.png')}
+        style={styles.backgroundImage}
+        resizeMode="contain"
+      />
+
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardAvoidingView}
       >
-        
+        <ScrollView 
+          contentContainerStyle={styles.scrollContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.contentWrapper}>
+            <View style={styles.content}>
+              <Text style={styles.title}>Login to Wallet</Text>
+              <Text style={styles.subtitle}>
+                Enter your wallet address and recovery phrase to access your wallet.
+              </Text>
 
-        {/* Logo */}
-        <View style={styles.logoContainer}>
-          <Image 
-            source={require('../assets/main_logo.png')} 
-            style={styles.logo}
-            resizeMode="contain"
-          />
-        </View>
+              <TextInput
+                style={styles.input}
+                placeholder="Wallet Address"
+                placeholderTextColor="#6B7280"
+                value={walletAddress}
+                onChangeText={setWalletAddress}
+                keyboardAppearance="dark"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
 
-        {/* Welcome Text */}
-        <View style={styles.welcomeContainer}>
-          <Text style={styles.welcomeTitle}>Welcome to Denario</Text>
-          <Text style={styles.welcomeSubtitle}>
-            Your secure crypto wallet solution
-          </Text>
-        </View>
+              <View style={styles.recoveryPhraseContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Secret Recovery Phrase"
+                placeholderTextColor="#6B7280"
+                value={recoveryPhrase}
+                onChangeText={setRecoveryPhrase}
+                keyboardAppearance="dark"
+                secureTextEntry={!showRecoveryPhrase}
+                autoCapitalize="none"
+                autoCorrect={false}
+               />  
+                <TouchableOpacity
+                  style={styles.eyeButton}
+                  onPress={() => setShowRecoveryPhrase(!showRecoveryPhrase)}
+                >
+                  <Text style={styles.eyeIcon}>
+                    {showRecoveryPhrase ? '👁️' : '🙈'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-        {/* Buttons */}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity 
-            style={[styles.button, styles.signupButton]}
-            onPress={() => navigation.navigate('Password')}
-          >
-            <View
-              style={styles.buttonGradient}
-            >
-              <Text style={styles.buttonText}>Create New Wallet</Text>
+              <TouchableOpacity
+                style={styles.forgotPhraseButton}
+                onPress={() => navigation.navigate('RecoveryHelp')}
+              >
+                <Text style={styles.forgotPhraseText}>
+                  Forgot your recovery phrase?
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.loginButton,
+                  !isValidForm && styles.disabledButton,
+                ]}
+                onPress={handleLogin}
+                disabled={!isValidForm}
+              >
+                <View style={styles.buttonContent}>
+                  <Text style={styles.loginButtonText}>Login</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.createWalletButton}
+                onPress={() => navigation.navigate('Signup')}
+              >
+                <Text style={styles.createWalletText}>
+                  Don't have a wallet? <Text style={styles.createWalletLink}>Create one</Text>
+                </Text>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={[styles.button, styles.loginButton]}
-            onPress={() => {console.log("login karna not signup")}}
-          >
-            <Text style={styles.loginButtonText}>I already have a wallet</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            By continuing, you agree to our Terms of Service
-          </Text>
-        </View>
-      </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -76,105 +132,121 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     ...CommonStyles.container,
+    
   },
-  gradient: {
+  backgroundImage: {
+    position: 'absolute',
+    top: 0,
+    width: width,
+    height: 375,
+    resizeMode: 'cover',
+    zIndex: 0,
+  },
+  keyboardAvoidingView: {
     flex: 1,
+    zIndex: 1,
   },
-  // header: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'flex-end',
-  //   paddingHorizontal: Spacing.xl,
-  //   paddingTop: Spacing.xl,
-  // },
-
-  logoContainer: {
-    alignItems: 'center',
-    marginTop: Spacing.giant,
-    marginBottom: Spacing.xxl,
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
   },
-  logo: {
-    width: 120,
-    height: 120,
+  contentWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: height - 100,
   },
-  welcomeContainer: {
-    alignItems: 'center',
-    // paddingHorizontal: Spacing.giant,
-    marginBottom: Spacing.massive * 2 + Spacing.xl,
+  content: {
+    paddingHorizontal: '5%',
+    marginTop: 10,
+    alignItems: 'stretch',
   },
-  welcomeTitle: {
+  title: {
     ...CommonStyles.title,
-    fontSize: FontSizes.xl,
+    fontSize: FontSizes.xxl,
     marginBottom: Spacing.md,
-    textAlign: 'center',
   },
-  welcomeSubtitle: {
+  subtitle: {
     ...CommonStyles.subtitle,
-    fontSize: FontSizes.md,
-    textAlign: 'center',
+    fontSize: FontSizes.base,
+    marginBottom: Spacing.massive,
     lineHeight: 22,
   },
-  buttonContainer: {
-    // paddingHorizontal: Spacing.giant,
-    paddingHorizontal: '5%',
-    gap: Spacing.xl,
-    flexDirection: 'column',
-    alignItems: 'stretch',
+  input: {
+    backgroundColor: Colors.cardBackground,
+    borderRadius: 8,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.xl,
+    color: Colors.white,
+    fontSize: FontSizes.md,
     marginBottom: Spacing.xl,
-  },
-  button: {
-    ...CommonStyles.button,
-    borderRadius: 12,
-    marginBottom: Spacing.sm * 2,
+    borderWidth: 1,
+    borderColor: Colors.border,
     width: '100%',
     alignSelf: 'stretch',
-    paddingVertical: Spacing.xl,
-    paddingHorizontal: 0,
   },
-  signupButton: {
+  recoveryPhraseContainer: {
+    position: 'relative',
+    marginBottom: Spacing.md,
+  },
+  recoveryPhraseInput: {
+    minHeight: 80,
+    paddingRight: 50,
     marginBottom: 0,
   },
-  buttonGradient: {
-    paddingVertical: 0,
-    paddingHorizontal: 0,
+  eyeButton: {
+    position: 'absolute',
+    right: Spacing.md,
+    top: Spacing.md,
+    padding: Spacing.sm,
+  },
+  eyeIcon: {
+    fontSize: 20,
+  },
+  forgotPhraseButton: {
+    alignSelf: 'flex-end',
+    marginBottom: Spacing.massive,
+  },
+  forgotPhraseText: {
+    color: Colors.accent,
+    fontSize: FontSizes.sm,
+    textDecorationLine: 'underline',
+  },
+  loginButton: {
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: Spacing.xl,
+    width: '100%',
+    alignSelf: 'stretch',
+  },
+  buttonContent: {
+    backgroundColor: Colors.accent,
+    paddingVertical: Spacing.xl,
     alignItems: 'center',
     borderRadius: 12,
     width: '100%',
   },
-  buttonText: {
+  loginButtonText: {
     color: Colors.white,
     fontSize: FontSizes.md,
     fontWeight: FontWeights.semiBold,
     textAlign: 'center',
     flexShrink: 1,
   },
-  loginButton: {
-    backgroundColor: 'none',
-    borderWidth: 1,
-    borderColor: Colors.accent,
-    paddingVertical: Spacing.xl,
-    paddingHorizontal: 0,
+  disabledButton: {
+    opacity: 0.5,
+  },
+  createWalletButton: {
+    paddingVertical: Spacing.md,
     alignItems: 'center',
-    borderRadius: 12,
-    width: '100%',
-    alignSelf: 'stretch',
+    marginBottom: Spacing.xxl,
   },
-  loginButtonText: {
+  createWalletText: {
     color: Colors.gray,
-    fontSize: FontSizes.md,
+    fontSize: FontSizes.base,
+    textAlign: 'center',
+  },
+  createWalletLink: {
+    color: Colors.accent,
     fontWeight: FontWeights.semiBold,
-    textAlign: 'center',
-    flexShrink: 1,
-  },
-  footer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    // paddingHorizontal: Spacing.giant,
-    paddingBottom: Spacing.giant,
-  },
-  footerText: {
-    color: Colors.navInactive,
-    fontSize: FontSizes.xs,
-    textAlign: 'center',
-    lineHeight: 18,
   },
 });

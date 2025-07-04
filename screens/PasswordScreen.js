@@ -7,8 +7,14 @@ import {
   StyleSheet,
   SafeAreaView,
   Image,
-  Dimensions
+  Dimensions,
+  Modal,
+  ScrollView
+
 } from 'react-native';
+
+import { FontAwesome5 } from '@expo/vector-icons';
+
 import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
 
 const { width, height } = Dimensions.get('window');
@@ -18,6 +24,7 @@ export default function PasswordScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleContinue = () => {
     if (password && confirmPassword && password === confirmPassword && agreedToTerms) {
@@ -33,6 +40,61 @@ export default function PasswordScreen({ navigation }) {
         style={styles.backgroundImage}
         resizeMode="contain"
       />
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={isModalVisible}
+      onRequestClose={() => setIsModalVisible(false)}
+      
+    >
+      <SafeAreaView style={styles.overlay}>
+        <View style={styles.modalContainer}>
+          {/* Close Button */}
+          <TouchableOpacity style={styles.closeButton} onPress={() => setIsModalVisible(false)}>
+            <FontAwesome5 name="times" size={24} color="#fff" />
+          </TouchableOpacity>
+
+          {/* Title */}
+          <Text style={styles.titleModal}>Terms of Service</Text>
+
+          {/* Scrollable Terms Text */}
+          <ScrollView style={styles.scrollArea}>
+          <Text style={styles.termsText}>
+              {`
+(HACKATHON DEMO)
+
+This application is a prototype developed for demonstration purposes only as part of a Web3 hackathon. By using this app, you acknowledge and agree to the following terms:
+
+1. NO WARRANTY OR GUARANTEE:
+This app is provided “as-is” and “as available” without any warranties or guarantees of any kind, either express or implied. The app may contain bugs, security vulnerabilities, or incomplete features. The developers do not warrant that the app will be uninterrupted, error-free, or secure.
+
+2. LIMITATION OF LIABILITY:
+The developers and associated parties are not responsible or liable for any loss, damage, or inconvenience caused by the use or inability to use this app. This includes but is not limited to loss of data, digital assets, or any other damages resulting from app usage.
+
+3. NO COLLECTION OF PERSONAL DATA:
+This app does not collect, store, or share any personal or sensitive user information. Any data input during usage is only stored temporarily on your device and will not be transmitted to third parties.
+
+4. USER RESPONSIBILITY:
+By using this app, you accept full responsibility for your actions and any consequences that may arise. You agree to use the app only in accordance with applicable laws and regulations.
+
+5. INTELLECTUAL PROPERTY:
+All content, code, graphics, and trademarks associated with this app are the property of the developers unless otherwise stated. Unauthorized use, reproduction, or distribution is prohibited.
+
+6. GOVERNING LAW:
+These terms shall be governed and construed in accordance with the laws of the jurisdiction in which the hackathon is organized, without regard to conflict of law principles.
+
+7. CHANGES TO TERMS:
+As this is a demo app for a hackathon, the developers reserve the right to update or modify these terms at any time without prior notice.
+
+IF YOU DO NOT AGREE WITH THESE TERMS AND CONDITIONS, PLEASE DO NOT USE THIS APPLICATION.
+              `}
+            </Text>
+
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+
+    </Modal>
 
       <View style={styles.contentWrapper}>
         <View style={styles.content}>
@@ -66,7 +128,11 @@ export default function PasswordScreen({ navigation }) {
               {agreedToTerms && <Text style={styles.checkmark}>✓</Text>}
             </View>
             <Text style={styles.termsText}>
-              I agree to the <Text style={styles.termsLink}>Terms of Service</Text>
+              I agree to the 
+              <Text 
+                style={styles.termsLink} 
+                onPress={() => setIsModalVisible(true)}
+              >Terms of Service</Text>
             </Text>
           </TouchableOpacity>
 
@@ -213,5 +279,59 @@ const styles = StyleSheet.create({
   },
   progressDotActive: {
     backgroundColor: Colors.accent,
+  },
+
+
+
+
+
+
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent background
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  
+  modalContainer: {
+    width: '90%',
+    maxHeight: '80%',
+    backgroundColor: Colors.cardBackground,
+    borderRadius: 8,
+    padding: 20,
+    paddingTop: 40,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 10,
+    position: 'relative',
+  },
+  
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 10,
+    
+  },
+  
+  titleModal: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 12,
+    textAlign: 'center',
+    color: '#fff',
+  },
+  
+  scrollArea: {
+    marginTop: 10,
+    paddingHorizontal: 5,
+  },
+  
+  termsText: {
+    fontSize: 14,
+    lineHeight: 22,
+    color: '#fff',
   },
 });

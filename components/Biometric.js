@@ -38,13 +38,13 @@ export default function Biometric() {
 
         <Text style={styles.headerTitle}>Biometric Scan</Text>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           activeOpacity={0.6}
           style={styles.headerButton}
           onPress={() => console.log('Settings pressed')}
         >
           <Ionicons name="settings-outline" size={24} color={Colors.white} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {/* Main Card Section */}

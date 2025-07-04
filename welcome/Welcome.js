@@ -13,7 +13,7 @@ import {
   Platform
   
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationIndependentTree } from '@react-navigation/native';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import Svg, { Path, Defs, ClipPath, G, ForeignObject } from 'react-native-svg';
 import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
@@ -29,7 +29,7 @@ const Stack = createStackNavigator();
 // Main Welcome Component
 export default function Welcome() {
   return (
-    <NavigationContainer>
+    <NavigationIndependentTree>
       <Stack.Navigator 
         initialRouteName="Welcome1"
         screenOptions={{ headerShown: false,
@@ -48,7 +48,7 @@ export default function Welcome() {
         <Stack.Screen name="Welcome2" component={Welcome2} />
         <Stack.Screen name="Welcome3" component={Welcome3} />
       </Stack.Navigator>
-    </NavigationContainer>
+    </NavigationIndependentTree>
   );
 };
 

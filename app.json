@@ -30,6 +30,10 @@
         "projectId": "7b788120-a096-4b81-8ed1-593014185999"
       }
     },
-    "owner": "crypto_wallet"
+    "owner": "crypto_wallet",
+    "plugins": [
+      "expo-barcode-scanner"
+    ]
+    
   }
 }

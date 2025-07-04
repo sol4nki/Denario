@@ -9,10 +9,11 @@ import {
   Animated,
   Dimensions,
   SafeAreaView,
-  FlatList
+  FlatList,
+  Image
 } from "react-native";
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
-import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from './styles/theme';
+import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -165,7 +166,7 @@ const ActionButton = ({ icon, label, onPress, color = '#16112B' }) => {
 };
 
 // Main Homepage Component
-export default function Homepage() {
+export default function Homepage({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
 
   
@@ -186,15 +187,21 @@ export default function Homepage() {
       
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.headerButton} onPress={() => console.log("hamburg menu pressed")}>
-          <Ionicons name="menu" size={24} color="#FFFFFF" />
+      <TouchableOpacity style={styles.logoButton} onPress={() => navigation.navigate('More')}>
+          <View style={styles.logoCircle}>
+            <Image
+              source={require("../assets/main_logo.png")}
+              style={styles.headerLogo}
+              resizeMode="contain"
+            />
+          </View>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Wallet</Text>
         <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.headerButton} onPress={() => console.log("qr scanner pressed")}>
+          <TouchableOpacity style={styles.headerButton} onPress={() => navigation.navigate('QRscanner')}>
             <Ionicons name="scan" size={24} color="#FFFFFF" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.headerButton} onPress={() => console.log("search menu pressed")}>
+          <TouchableOpacity style={styles.headerButton} onPress={() => navigation.navigate('Search')}>
             <Ionicons name="search" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
@@ -224,25 +231,25 @@ export default function Homepage() {
             icon="shopping-cart" 
             label="Buy" 
             color="#16112B"
-            onPress={() => console.log('Buy pressed')}
+            onPress={() => navigation.navigate('Buy')}
           />
           <ActionButton 
             icon="download" 
             label="Receive" 
             color="#16112B"
-            onPress={() => console.log('Receive pressed')}
+            onPress={() => navigation.navigate('Receive')}
           />
           <ActionButton 
             icon="paper-plane" 
             label="Send" 
             color="#16112B"
-            onPress={() => console.log('Send pressed')}
+            onPress={() => navigation.navigate('Send')}
           />
           <ActionButton 
             icon="chart-line" 
             label="Activity" 
             color="#16112B"
-            onPress={() => console.log('Activity pressed')}
+            onPress={() => navigation.navigate('Activity')}
           />
         </View>
 
@@ -279,25 +286,25 @@ export default function Homepage() {
         </View>
       </ScrollView>
 
-      {/* Bottom Navigation */}
+      {/* Bottom Navigation
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log("Home pressed")}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Homepage')}>
           <Ionicons name="home" size={24} color="#7B68EE" />
           <Text style={[styles.navLabel, { color: '#7B68EE' }]}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log("Swap pressed")}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('TradeSwap')}>
           <FontAwesome5 name="exchange-alt" size={20} color="#6B7280" />
           <Text style={styles.navLabel}>Swap</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log("Activity pressed")}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('RecentLogs')}>
           <Ionicons name="time" size={24} color="#6B7280" />
           <Text style={styles.navLabel}>Activity</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log("More info pressed")}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('MiscMain')}>
           <Ionicons name="card" size={24} color="#6B7280" />
           <Text style={styles.navLabel}>More</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };
@@ -317,7 +324,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   headerButton: {
-    padding: Spacing.sm,
+    paddingHorizontal: Spacing.md,
   },
   headerTitle: {
     fontSize: FontSizes.xl,
@@ -397,7 +404,7 @@ const styles = StyleSheet.create({
   },
   tokenSection: {
     paddingHorizontal: Spacing.xl,
-    marginBottom: 100,
+    marginBottom: 20,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -503,6 +510,23 @@ const styles = StyleSheet.create({
     color: Colors.navInactive,
     marginTop: 4,
     fontWeight: FontWeights.medium,
+  },
+  logoButton: {
+    padding: Spacing.xs,
+  },
+  logoCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.cardBackground,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerLogo: {
+    width: 24,
+    height: 24,
   },
 });
 

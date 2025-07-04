@@ -11,67 +11,72 @@ import {
   TextInput,
   FlatList
 } from "react-native";
+
+import { useNavigation } from '@react-navigation/native';
+
+
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
 
 // Sample data for recent and trending tokens
 const recentTokens = [
-  { id: '1', symbol: 'BUNK', name: 'Bunk Token', color: '#FF6B9D' },
-  { id: '2', symbol: 'BUNK', name: 'Bunk Protocol', color: '#4ECDC4' },
-  { id: '3', symbol: 'BUNK', name: 'Bunk Coin', color: '#45B7D1' },
+  { id: '1', symbol: 'BLNK', name: 'Blink Token', color: '#FF6B9D' },
+  { id: '2', symbol: 'BPRO', name: 'Bunk Protocol', color: '#4ECDC4' },
+  { id: '3', symbol: 'BNKC', name: 'Bunk Coin', color: '#45B7D1' },
 ];
 
 const trendingTokens = [
   { 
     id: '1', 
-    name: 'Name of wtv it is', 
-    description: 'short description',
-    color: '#FF6B9D',
-    trending: true
+    name: 'Solaris', 
+    description: 'Decentralized energy trading platform', 
+    color: '#FF6B9D', 
+    trending: true 
   },
   { 
     id: '2', 
-    name: 'Name', 
-    description: 'short desc',
-    color: '#4ECDC4',
-    trending: false
+    name: 'Hydra Chain', 
+    description: 'Multi-headed DeFi protocol for yield farming', 
+    color: '#4ECDC4', 
+    trending: false 
   },
   { 
     id: '3', 
-    name: 'wtv', 
-    description: 'some thing',
-    color: '#45B7D1',
-    trending: false
+    name: 'PixelBits', 
+    description: 'Gaming token for pixel-based metaverse assets', 
+    color: '#45B7D1', 
+    trending: false 
   },
   { 
     id: '4', 
-    name: 'Name of wtv it is', 
-    description: 'short description',
-    color: '#9B59B6',
-    trending: true
+    name: 'NeonLink', 
+    description: 'Web3 infrastructure for dApps and smart contracts', 
+    color: '#9B59B6', 
+    trending: true 
   },
   { 
     id: '5', 
-    name: 'Name', 
-    description: 'short desc',
-    color: '#F39C12',
-    trending: false
+    name: 'EcoByte', 
+    description: 'Sustainable blockchain for green initiatives', 
+    color: '#F39C12', 
+    trending: false 
   },
   { 
     id: '6', 
-    name: 'Name of wtv it is', 
-    description: 'short description',
-    color: '#E74C3C',
-    trending: true
+    name: 'CrimsonFi', 
+    description: 'Next-gen decentralized finance protocol', 
+    color: '#E74C3C', 
+    trending: true 
   },
   { 
     id: '7', 
-    name: 'Name', 
-    description: 'short desc',
-    color: '#2ECC71',
-    trending: false
+    name: 'Verdant', 
+    description: 'Eco-friendly token for carbon credit trading', 
+    color: '#2ECC71', 
+    trending: false 
   },
 ];
+
 
 // Enhanced Token Item Component
 const TokenItem = ({ item, onPress, isRecent = false }) => {
@@ -166,6 +171,7 @@ const TokenItem = ({ item, onPress, isRecent = false }) => {
 const SearchHeader = ({ searchQuery, setSearchQuery, onCancel }) => {
   const [focusAnimation] = useState(new Animated.Value(0));
   const textInputRef = useRef(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     // Auto-focus and animate on mount
@@ -195,7 +201,7 @@ const SearchHeader = ({ searchQuery, setSearchQuery, onCancel }) => {
       {
         backgroundColor: focusAnimation.interpolate({
           inputRange: [0, 1],
-          outputRange: ['#0D0A19', '#16112B'],
+          outputRange: ['#0D0A19', '#0D0A19'],
         }),
       }
     ]}>
@@ -224,15 +230,19 @@ const SearchHeader = ({ searchQuery, setSearchQuery, onCancel }) => {
           )}
         </View>
         <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
-          <Text style={styles.cancelText}>Cancel</Text>
+          <Text style={styles.cancelText} onPress={() => navigation.goBack()}>Cancel</Text>
         </TouchableOpacity>
       </View>
     </Animated.View>
   );
 };
 
+
 // Main Search Component
 export default function TokenSearch() {
+
+  
+
   const [searchQuery, setSearchQuery] = useState('');
   const [slideAnimation] = useState(new Animated.Value(0));
 
@@ -362,7 +372,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.cardBackground,
+    backgroundColor: Colors.background,
     borderRadius: 12,
     paddingHorizontal: Spacing.md,
     marginRight: Spacing.md,
