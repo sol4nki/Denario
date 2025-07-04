@@ -35,7 +35,7 @@ import TabNavigator from './TabNavigator';
 
 const Stack = createStackNavigator();
 
-const Loggedin = true
+const Loggedin = false
 
 
 
@@ -99,6 +99,14 @@ export default function App() {
           <Stack.Screen name="RecoveryPhraseScreen" component={RecoveryPhraseScreen} />
           <Stack.Screen name="SuccessScreen" component={SuccessScreen} /> */}
           <Stack.Screen name="LoginCompilation" component={LoginCompilation} />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="Biometric" component={Biometric}/>
+          <Stack.Screen name="Buy" component={Buy}/>
+          <Stack.Screen name="QRscanner" component={QRscanner}/>
+          <Stack.Screen name="Receive" component={Receive}/>
+          <Stack.Screen name="Search" component={Search}/>
+          <Stack.Screen name="SearchActivity" component={SearchActivity}/>
+          <Stack.Screen name="Send" component={Send}/>
 
         </Stack.Navigator>
       </NavigationContainer>
