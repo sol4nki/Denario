@@ -26,7 +26,6 @@ import Welcome3 from "./Welcome3.js";
 const { width, height } = Dimensions.get('window');
 const Stack = createStackNavigator();
 
-// Main Welcome Component
 export default function Welcome() {
   return (
     <NavigationIndependentTree>
@@ -145,5 +144,3 @@ const styles = StyleSheet.create({
     fontWeight: FontWeights.semiBold,
   },
 });
-
-// export default App;

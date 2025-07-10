@@ -1,1 +1,1 @@
-// implement settings at last
+// implemeneted in more.js

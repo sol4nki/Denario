@@ -1,4 +1,4 @@
-// screens/LoginScreen.js
+
 import React from 'react';
 import {
   View,
@@ -10,10 +10,6 @@ import {
   Dimensions,
 } from 'react-native';
 import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
-
-// import { LinearGradient } from 'expo-linear-gradient';
-
-// const { width, height } = Dimensions.get('window');
 
 export default function SignupScreen({ navigation }) {
   return (
@@ -80,12 +76,6 @@ const styles = StyleSheet.create({
   gradient: {
     flex: 1,
   },
-  // header: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'flex-end',
-  //   paddingHorizontal: Spacing.xl,
-  //   paddingTop: Spacing.xl,
-  // },
 
   logoContainer: {
     alignItems: 'center',
@@ -98,7 +88,7 @@ const styles = StyleSheet.create({
   },
   welcomeContainer: {
     alignItems: 'center',
-    // paddingHorizontal: Spacing.giant,
+
     marginBottom: Spacing.massive * 2 + Spacing.xl,
   },
   welcomeTitle: {
@@ -114,7 +104,6 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   buttonContainer: {
-    // paddingHorizontal: Spacing.giant,
     paddingHorizontal: '5%',
     gap: Spacing.xl,
     flexDirection: 'column',
@@ -168,7 +157,6 @@ const styles = StyleSheet.create({
   footer: {
     flex: 1,
     justifyContent: 'flex-end',
-    // paddingHorizontal: Spacing.giant,
     paddingBottom: Spacing.giant,
   },
   footerText: {

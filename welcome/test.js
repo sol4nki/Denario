@@ -1,6 +1,5 @@
 import * as React from "react";
 import Svg, { G, ForeignObject, Path, Defs, ClipPath } from "react-native-svg";
-/* SVGR has dropped some elements not supported by react-native-svg: div */
 const TestSvg = (props) => (
   <Svg
     width={200}

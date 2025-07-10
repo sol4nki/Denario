@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,79 +9,33 @@ import {
   Animated,
   SafeAreaView,
   TextInput,
-  FlatList
+  Image,
+  Platform,
+  RefreshControl,
 } from "react-native";
+import fetchTrendingTokens from "../services/coinTrending";
+import { useNavigation } from "@react-navigation/native";
 
-import { useNavigation } from '@react-navigation/native';
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import {
+  Colors,
+  FontSizes,
+  FontWeights,
+  Spacing,
+  CommonStyles,
+} from "../styles/theme";
 
-
-import { FontAwesome5, Ionicons } from '@expo/vector-icons';
-import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
-
-// Sample data for recent and trending tokens
 const recentTokens = [
-  { id: '1', symbol: 'BLNK', name: 'Blink Token', color: '#FF6B9D' },
-  { id: '2', symbol: 'BPRO', name: 'Bunk Protocol', color: '#4ECDC4' },
-  { id: '3', symbol: 'BNKC', name: 'Bunk Coin', color: '#45B7D1' },
+  { id: "1", symbol: "BLNK", name: "Blink Token", color: "#FF6B9D" },
+  { id: "2", symbol: "BPRO", name: "Bunk Protocol", color: "#4ECDC4" },
+  { id: "3", symbol: "BNKC", name: "Bunk Coin", color: "#45B7D1" },
 ];
+const statusBarHeight = Platform.OS === "android" ? StatusBar.currentHeight : 0;
 
-const trendingTokens = [
-  { 
-    id: '1', 
-    name: 'Solaris', 
-    description: 'Decentralized energy trading platform', 
-    color: '#FF6B9D', 
-    trending: true 
-  },
-  { 
-    id: '2', 
-    name: 'Hydra Chain', 
-    description: 'Multi-headed DeFi protocol for yield farming', 
-    color: '#4ECDC4', 
-    trending: false 
-  },
-  { 
-    id: '3', 
-    name: 'PixelBits', 
-    description: 'Gaming token for pixel-based metaverse assets', 
-    color: '#45B7D1', 
-    trending: false 
-  },
-  { 
-    id: '4', 
-    name: 'NeonLink', 
-    description: 'Web3 infrastructure for dApps and smart contracts', 
-    color: '#9B59B6', 
-    trending: true 
-  },
-  { 
-    id: '5', 
-    name: 'EcoByte', 
-    description: 'Sustainable blockchain for green initiatives', 
-    color: '#F39C12', 
-    trending: false 
-  },
-  { 
-    id: '6', 
-    name: 'CrimsonFi', 
-    description: 'Next-gen decentralized finance protocol', 
-    color: '#E74C3C', 
-    trending: true 
-  },
-  { 
-    id: '7', 
-    name: 'Verdant', 
-    description: 'Eco-friendly token for carbon credit trading', 
-    color: '#2ECC71', 
-    trending: false 
-  },
-];
-
-
-// Enhanced Token Item Component
 const TokenItem = ({ item, onPress, isRecent = false }) => {
   const [scaleValue] = useState(new Animated.Value(1));
   const [opacityValue] = useState(new Animated.Value(0));
+  const navigation = useNavigation();
 
   useEffect(() => {
     Animated.timing(opacityValue, {
@@ -107,20 +61,24 @@ const TokenItem = ({ item, onPress, isRecent = false }) => {
 
   if (isRecent) {
     return (
-      <Animated.View style={[
-        styles.recentTokenItem, 
-        { 
-          transform: [{ scale: scaleValue }],
-          opacity: opacityValue 
-        }
-      ]}>
+      <Animated.View
+        style={[
+          styles.recentTokenItem,
+          {
+            transform: [{ scale: scaleValue }],
+            opacity: opacityValue,
+          },
+        ]}
+      >
         <TouchableOpacity
           onPress={onPress}
           onPressIn={handlePressIn}
           onPressOut={handlePressOut}
           activeOpacity={0.8}
         >
-          <View style={[styles.recentTokenIcon, { backgroundColor: item.color }]}>
+          <View
+            style={[styles.recentTokenIcon, { backgroundColor: item.color }]}
+          >
             <Text style={styles.recentTokenText}>{item.symbol}</Text>
           </View>
         </TouchableOpacity>
@@ -129,13 +87,15 @@ const TokenItem = ({ item, onPress, isRecent = false }) => {
   }
 
   return (
-    <Animated.View style={[
-      styles.trendingTokenItem, 
-      { 
-        transform: [{ scale: scaleValue }],
-        opacity: opacityValue 
-      }
-    ]}>
+    <Animated.View
+      style={[
+        styles.trendingTokenItem,
+        {
+          transform: [{ scale: scaleValue }],
+          opacity: opacityValue,
+        },
+      ]}
+    >
       <TouchableOpacity
         style={styles.trendingTokenContent}
         onPress={onPress}
@@ -144,8 +104,8 @@ const TokenItem = ({ item, onPress, isRecent = false }) => {
         activeOpacity={0.8}
       >
         <View style={styles.trendingTokenLeft}>
-          <View style={[styles.trendingTokenIcon, { backgroundColor: item.color }]}>
-            <View style={styles.tokenIconInner} />
+          <View style={[styles.trendingTokenIcon]}>
+            <Image source={{ uri: item.small }} style={styles.tokenImage} />
           </View>
           <View style={styles.trendingTokenInfo}>
             <View style={styles.trendingTokenNameRow}>
@@ -156,10 +116,24 @@ const TokenItem = ({ item, onPress, isRecent = false }) => {
                 </View>
               )}
             </View>
-            <Text style={styles.trendingTokenDescription}>{item.description}</Text>
+            {item.description && (
+              <Text style={styles.trendingTokenDescription} numberOfLines={2}>
+                {item.description}
+              </Text>
+            )}
+            {item.price && (
+              <Text style={styles.trendingTokenPrice}>
+                ${item.price.toFixed(6)}
+              </Text>
+            )}
           </View>
         </View>
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() =>
+            navigation.navigate("CoinDetails", { coinId: item.id })
+          }
+        >
           <Ionicons name="add" size={16} color="#7B68EE" />
         </TouchableOpacity>
       </TouchableOpacity>
@@ -167,14 +141,13 @@ const TokenItem = ({ item, onPress, isRecent = false }) => {
   );
 };
 
-// Enhanced Search Header Component
+
 const SearchHeader = ({ searchQuery, setSearchQuery, onCancel }) => {
   const [focusAnimation] = useState(new Animated.Value(0));
   const textInputRef = useRef(null);
   const navigation = useNavigation();
 
   useEffect(() => {
-    // Auto-focus and animate on mount
     setTimeout(() => {
       textInputRef.current?.focus();
       Animated.timing(focusAnimation, {
@@ -196,18 +169,25 @@ const SearchHeader = ({ searchQuery, setSearchQuery, onCancel }) => {
   };
 
   return (
-    <Animated.View style={[
-      styles.searchHeader,
-      {
-        backgroundColor: focusAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: ['#0D0A19', '#0D0A19'],
-        }),
-      }
-    ]}>
+    <Animated.View
+      style={[
+        styles.searchHeader,
+        {
+          backgroundColor: focusAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: ["#0D0A19", "#0D0A19"],
+          }),
+        },
+      ]}
+    >
       <View style={styles.searchContainer}>
         <View style={styles.searchInputContainer}>
-          <Ionicons name="search" size={20} color="#6B7280" style={styles.searchIcon} />
+          <Ionicons
+            name="search"
+            size={20}
+            color="#6B7280"
+            style={styles.searchIcon}
+          />
           <TextInput
             keyboardAppearance="dark"
             ref={textInputRef}
@@ -218,11 +198,10 @@ const SearchHeader = ({ searchQuery, setSearchQuery, onCancel }) => {
             onChangeText={setSearchQuery}
             autoFocus={true}
             selectionColor="#7B68EE"
-            
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity
-              onPress={() => setSearchQuery('')}
+              onPress={() => setSearchQuery("")}
               style={styles.clearButton}
             >
               <Ionicons name="close-circle" size={20} color="#6B7280" />
@@ -230,7 +209,9 @@ const SearchHeader = ({ searchQuery, setSearchQuery, onCancel }) => {
           )}
         </View>
         <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
-          <Text style={styles.cancelText} onPress={() => navigation.goBack()}>Cancel</Text>
+          <Text style={styles.cancelText} onPress={() => navigation.goBack()}>
+            Cancel
+          </Text>
         </TouchableOpacity>
       </View>
     </Animated.View>
@@ -238,13 +219,24 @@ const SearchHeader = ({ searchQuery, setSearchQuery, onCancel }) => {
 };
 
 
-// Main Search Component
 export default function TokenSearch() {
+  const [trendingTokens, setTrendingTokens] = useState([]);
 
-  
-
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [slideAnimation] = useState(new Animated.Value(0));
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    const loadTrendingTokens = async () => {
+      try {
+        const data = await fetchTrendingTokens();
+        setTrendingTokens(data);
+      } catch (error) {
+        console.error("Error loading trending tokens:", error);
+      }
+    };
+    loadTrendingTokens();
+  }, []);
 
   useEffect(() => {
     Animated.timing(slideAnimation, {
@@ -254,50 +246,72 @@ export default function TokenSearch() {
     }).start();
   }, []);
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      const data = await fetchTrendingTokens();
+      setTrendingTokens(data);
+    } catch (e) {
+      console.error('Failed to refresh trending tokens:', e);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const handleCancel = () => {
-    console.log('Cancel pressed - navigate back');
+    console.log("Cancel pressed - navigate back");
   };
 
   const handleTokenPress = (token, isRecent = false) => {
-    console.log(`${isRecent ? 'Recent' : 'Trending'} token pressed:`, token);
+    console.log(`${isRecent ? "Recent" : "Trending"} token pressed:`, token);
   };
 
   const handleClearRecents = () => {
-    console.log('Clear recents pressed');
+    console.log("Clear recents pressed");
   };
 
-  // Filter trending tokens based on search query
-  const filteredTrendingTokens = trendingTokens.filter(token =>
-    token.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    token.description.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredTrendingTokens = trendingTokens.filter((token) =>
+    token.name?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#0D0A19" />
-      
-      <SearchHeader 
+
+      <SearchHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         onCancel={handleCancel}
       />
 
-      <Animated.View style={[
-        styles.content,
-        {
-          transform: [{
-            translateY: slideAnimation.interpolate({
-              inputRange: [0, 1],
-              outputRange: [50, 0],
-            }),
-          }],
-          opacity: slideAnimation,
-        }
-      ]}>
-        <ScrollView 
+      <Animated.View
+        style={[
+          styles.content,
+          {
+            transform: [
+              {
+                translateY: slideAnimation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [50, 0],
+                }),
+              },
+            ],
+            opacity: slideAnimation,
+          },
+        ]}
+      >
+        <ScrollView
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={Colors.accent}
+              colors={[Colors.accent]}
+            />
+          }
         >
           {/* Recent Section */}
           <View style={styles.section}>
@@ -307,7 +321,7 @@ export default function TokenSearch() {
                 <Text style={styles.clearText}>Clear</Text>
               </TouchableOpacity>
             </View>
-            
+
             <View style={styles.recentTokensContainer}>
               {recentTokens.map((token, index) => (
                 <TokenItem
@@ -325,7 +339,7 @@ export default function TokenSearch() {
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Trending</Text>
             </View>
-            
+
             <View style={styles.trendingTokensContainer}>
               {filteredTrendingTokens.map((token, index) => (
                 <TokenItem
@@ -336,12 +350,14 @@ export default function TokenSearch() {
                 />
               ))}
             </View>
-            
+
             {searchQuery.length > 0 && filteredTrendingTokens.length === 0 && (
               <View style={styles.noResultsContainer}>
                 <FontAwesome5 name="search" size={40} color="#6B7280" />
                 <Text style={styles.noResultsText}>No tokens found</Text>
-                <Text style={styles.noResultsSubtext}>Try searching with different keywords</Text>
+                <Text style={styles.noResultsSubtext}>
+                  Try searching with different keywords
+                </Text>
               </View>
             )}
           </View>
@@ -355,6 +371,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
+    paddingTop: statusBarHeight,
   },
   searchHeader: {
     paddingHorizontal: Spacing.xl,
@@ -365,13 +382,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   searchInputContainer: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: Colors.background,
     borderRadius: 12,
     paddingHorizontal: Spacing.md,
@@ -411,9 +428,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.massive,
   },
   sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: Spacing.lg,
     marginTop: Spacing.xl,
   },
@@ -428,8 +445,8 @@ const styles = StyleSheet.create({
     fontWeight: FontWeights.medium,
   },
   recentTokensContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: Spacing.md,
   },
   recentTokenItem: {
@@ -440,8 +457,8 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     shadowColor: Colors.background,
     shadowOffset: {
       width: 0,
@@ -475,14 +492,14 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   trendingTokenContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: Spacing.lg,
   },
   trendingTokenLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     flex: 1,
   },
   trendingTokenIcon: {
@@ -490,8 +507,8 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 22,
     marginRight: Spacing.lg,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     shadowColor: Colors.background,
     shadowOffset: {
       width: 0,
@@ -502,18 +519,17 @@ const styles = StyleSheet.create({
     elevation: 2,
     backgroundColor: Colors.accent,
   },
-  tokenIconInner: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: Colors.white + '30',
+  tokenImage: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
   },
   trendingTokenInfo: {
     flex: 1,
   },
   trendingTokenNameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: Spacing.xs,
   },
   trendingTokenName: {
@@ -523,27 +539,35 @@ const styles = StyleSheet.create({
     marginRight: Spacing.sm,
   },
   trendingBadge: {
-    backgroundColor: Colors.green + '20',
+    backgroundColor: Colors.green + "20",
     borderRadius: 8,
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
   },
   trendingTokenDescription: {
-    fontSize: FontSizes.base,
+    fontSize: FontSizes.sm,
     color: Colors.gray,
+    marginBottom: Spacing.xs,
+    lineHeight: 16,
+    width: "90%",
+  },
+  trendingTokenPrice: {
+    fontSize: FontSizes.sm,
+    color: Colors.white,
+    fontWeight: FontWeights.medium,
   },
   addButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: Colors.accent + '20',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: Colors.accent + "20",
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: Colors.accent,
   },
   noResultsContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: Spacing.massive,
   },
   noResultsText: {
@@ -556,6 +580,6 @@ const styles = StyleSheet.create({
   noResultsSubtext: {
     fontSize: FontSizes.base,
     color: Colors.gray,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

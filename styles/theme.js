@@ -1,14 +1,13 @@
-// Theme constants based on Homepage.js
 
 export const Colors = {
-  background: '#0D0A19',
-  cardBackground: '#16112B',
-  border: '#2C1E51',
-  white: '#FFFFFF',
-  gray: '#9CA3AF',
-  accent: '#7B68EE',
-  green: '#4ECDC4',
-  navInactive: '#6B7280',
+  background: "#0D0A19",
+  cardBackground: "#16112B",
+  border: "#2C1E51",
+  white: "#FFFFFF",
+  gray: "#9CA3AF",
+  accent: "#7B68EE",
+  green: "#4ECDC4",
+  navInactive: "#6B7280",
 };
 
 export const FontSizes = {
@@ -22,10 +21,10 @@ export const FontSizes = {
 };
 
 export const FontWeights = {
-  regular: '400',
-  medium: '500',
-  semiBold: '600',
-  bold: 'bold',
+  regular: "400",
+  medium: "500",
+  semiBold: "600",
+  bold: "bold",
 };
 
 export const Spacing = {
@@ -57,11 +56,11 @@ export const CommonStyles = {
   },
   button: {
     borderRadius: 12,
-    overflow: 'hidden',
+    overflow: "hidden",
     backgroundColor: Colors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: Spacing.xl,
     paddingHorizontal: Spacing.xl,
   },
-}; 
+};

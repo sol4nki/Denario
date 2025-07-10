@@ -39,7 +39,6 @@ export default function Welcome3({ navigation }){
       }),
     ]).start();
 
-    // Button pulse animation
     Animated.loop(
       Animated.sequence([
         Animated.timing(buttonScale, {
@@ -65,10 +64,6 @@ export default function Welcome3({ navigation }){
             />
         <SafeAreaView style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
-        
-        {/* <View style={styles.svgContainer}>
-            <AnimatedSVG1 />
-        </View> */}
 
         <Animated.View 
             style={[
@@ -92,7 +87,6 @@ export default function Welcome3({ navigation }){
             <TouchableOpacity 
                 style={styles.getStartedButton}
                 onPress={() => {
-                // Navigate to main app or handle completion
                 navigation.navigate('LoginCompilation');
 
                 }}

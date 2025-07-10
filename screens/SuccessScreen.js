@@ -1,4 +1,3 @@
-// screens/SuccessScreen.js
 import React from 'react';
 import {
   View,
@@ -37,7 +36,7 @@ export default function SuccessScreen({ navigation }) {
 
         <TouchableOpacity
           style={styles.continueButton}
-          onPress={() => navigation.navigate('TabNavigator')} // or your main app route
+          onPress={() => navigation.navigate('TabNavigator')}
         >
           <View style={styles.button}>
             <Text style={styles.buttonText}>Continue</Text>
@@ -69,7 +68,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     zIndex: 2,
-    // paddingHorizontal: Spacing.xl + Spacing.md,
     paddingHorizontal: '5%',
     justifyContent: 'center',
     alignItems: 'center',

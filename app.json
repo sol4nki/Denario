@@ -4,26 +4,26 @@
     "slug": "denario",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/color_changed_logo.gif",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/color_changed_logo.gif",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0D0A19"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/color_changed_logo.gif",
+        "backgroundColor": "#0D0A19"
       },
       "edgeToEdgeEnabled": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo_color_change.png"
     },
     "extra": {
       "eas": {
@@ -32,8 +32,20 @@
     },
     "owner": "crypto_wallet",
     "plugins": [
-      "expo-barcode-scanner"
+      "expo-barcode-scanner",
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0D0A19",
+          "image": "./assets/color_changed_logo.gif",
+          "dark": {
+            "image": "./assets/color_changed_logo.gif",
+            "backgroundColor": "#0D0A19"
+          },
+          "imageWidth": 200
+        }
+      ]
     ]
-    
   }
 }

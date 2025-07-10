@@ -54,10 +54,6 @@ export default function Welcome2({ navigation }){
         <SafeAreaView style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
         
-        {/* <View style={styles.svgContainer}>
-            <AnimatedSVG2 />
-        </View> */}
-
         <Animated.View 
             style={[
             styles.contentContainer,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -7,44 +7,97 @@ import {
   Text,
   Button,
   SafeAreaView,
-  Platform
-} from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import Svg, { Path } from 'react-native-svg';
-import { Ionicons } from '@expo/vector-icons';
-import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
+  Platform,
+} from "react-native";
+import { StatusBar } from "expo-status-bar";
+import Svg, { Path } from "react-native-svg";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from '@react-navigation/native';
+import {
+  Colors,
+  FontSizes,
+  FontWeights,
+  Spacing,
+  CommonStyles,
+} from "../styles/theme";
 
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
+import * as LocalAuthentication from "expo-local-authentication";
+import { Camera } from "expo-camera";
 
 export default function Biometric() {
+  const navigation = useNavigation();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const handleScanPress = () => setIsModalVisible(true);
-  const statusBarHeight=Platform.OS==='android' ? Constants.statusBarHeight+8 : 0; 
+  const [modalMessage, setModalMessage] = useState("");
+  const [cameraPermission, setCameraPermission] = useState(null);
+  const [showCamera, setShowCamera] = useState(false);
+  const cameraRef = React.useRef(null);
+
+  const handleScanPress = async () => {
+
+    const hasHardware = await LocalAuthentication.hasHardwareAsync();
+   
+    if (hasHardware) {
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: "Authenticate with Biometrics",
+        fallbackLabel: "Use Passcode",
+      });
+      setModalMessage(
+        result.success
+          ? "Biometric authentication successful!"
+          : "Authentication failed.",
+      );
+      setIsModalVisible(true);
+    } else {
+
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setCameraPermission(status === "granted");
+      if (status === "granted") {
+        setShowCamera(true);
+      } else {
+        setModalMessage("Camera permission denied.");
+        setIsModalVisible(true);
+      }
+    }
+  };
+
+  const handlePhotoTaken = async () => {
+    if (cameraRef.current) {
+      await cameraRef.current.takePictureAsync();
+      setShowCamera(false);
+      setModalMessage("Photo taken (simulated biometric fallback).");
+      setIsModalVisible(true);
+    }
+  };
+
+  const statusBarHeight =
+    Platform.OS === "android" ? Constants.statusBarHeight + 8 : 0;
 
   return (
-    <SafeAreaView style={[CommonStyles.container, {paddingTop: statusBarHeight}]}>
+    <SafeAreaView
+      style={[CommonStyles.container, { paddingTop: statusBarHeight }]}
+    >
       <StatusBar style="light" backgroundColor={Colors.background} />
 
       {/* Header */}
-      
+
       <View style={styles.header}>
         <TouchableOpacity
           activeOpacity={0.6}
           style={styles.headerButton}
-          onPress={() => console.log('Back pressed')}
+          onPress={() => navigation.goBack()}
         >
           <Ionicons name="arrow-back-outline" size={24} color={Colors.white} />
         </TouchableOpacity>
 
-        <Text style={styles.headerTitle}>Biometric Scan</Text>
-
-        {/* <TouchableOpacity
-          activeOpacity={0.6}
-          style={styles.headerButton}
-          onPress={() => console.log('Settings pressed')}
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <Ionicons name="settings-outline" size={24} color={Colors.white} />
-        </TouchableOpacity> */}
+          <Text style={styles.headerTitle}>Biometric Scan</Text>
+        </View>
+
+    
+        <View style={{ width: 40 }} />
       </View>
 
       {/* Main Card Section */}
@@ -61,11 +114,53 @@ export default function Biometric() {
         </View>
       </View>
 
-      {/* Modal View */}
-      <Modal visible={isModalVisible} animationType="slide" transparent={false}>
-        <View style={styles.modalView}>
-          <Text style={{ fontSize: FontSizes.lg, marginBottom: Spacing.xl }}>Camera dekho friends</Text>
-          <Button title="Close Modal" onPress={() => setIsModalVisible(false)} />
+      {/* Camera fallback modal */}
+      {showCamera && cameraPermission && (
+        <Modal visible={showCamera} animationType="slide" transparent={false}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#000",
+            }}
+          >
+            <Camera style={{ flex: 1, width: "100%" }} ref={cameraRef} />
+            <Button title="Take Photo" onPress={handlePhotoTaken} />
+            <Button title="Cancel" onPress={() => setShowCamera(false)} />
+          </View>
+        </Modal>
+      )}
+
+      {/* Result Modal */}
+      <Modal visible={isModalVisible} animationType="slide" transparent={true}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.7)",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: 15,
+              padding: 30,
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: FontSizes.lg,
+                marginBottom: Spacing.xl,
+                color: "#000",
+              }}
+            >
+              {modalMessage}
+            </Text>
+            <Button title="Close" onPress={() => setIsModalVisible(false)} />
+          </View>
         </View>
       </Modal>
     </SafeAreaView>
@@ -93,9 +188,9 @@ function SvgComponent(props) {
 
 const styles = StyleSheet.create({
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: Spacing.xl,
     paddingTop: Spacing.xl,
     paddingBottom: Spacing.xl,
@@ -110,21 +205,22 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.xl,
     fontWeight: FontWeights.bold,
     color: Colors.white,
+    alignSelf: "center",
   },
   cardSection: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: Spacing.xl,
   },
   card: {
     backgroundColor: Colors.cardBackground,
     borderRadius: 20,
     padding: Spacing.massive,
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1,
     borderColor: Colors.border,
-    width: '100%',
+    width: "100%",
     maxWidth: 350,
     shadowColor: Colors.background,
     shadowOffset: { width: 0, height: 4 },
@@ -145,7 +241,7 @@ const styles = StyleSheet.create({
   modalView: {
     flex: 1,
     backgroundColor: Colors.white,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

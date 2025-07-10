@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,71 +10,57 @@ import {
   Dimensions,
   SafeAreaView,
   FlatList,
-  Image
+  Image,
+  Platform,
+  RefreshControl,
 } from "react-native";
-import { FontAwesome5, Ionicons } from '@expo/vector-icons';
-import { Colors, FontSizes, FontWeights, Spacing, CommonStyles } from '../styles/theme';
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import {
+  Colors,
+  FontSizes,
+  FontWeights,
+  Spacing,
+  CommonStyles,
+} from "../styles/theme";
 
-const { width } = Dimensions.get('window');
+import Constants from "expo-constants";
+import fetchCoinList from "../services/coinList";
+import fetchBalance from "../services/balanceFetch";
 
-const tokenData = [
-    {
-      name: 'Bitcoin',
-      symbol: 'BTC',
-      balance: '0.00234',
-      usdValue: '156.78',
-      changePercent: 2.45,
-      iconName: 'bitcoin',
-      iconColor: '#F7931A'
-    },
-    {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      balance: '1.2456',
-      usdValue: '2,834.56',
-      changePercent: -1.23,
-      iconName: 'ethereum',
-      iconColor: '#627EEA'
-    },
-    {
-      name: 'Cardano',
-      symbol: 'ADA',
-      balance: '1,000.00',
-      usdValue: '450.00',
-      changePercent: 5.67,
-      iconName: 'coins',
-      iconColor: '#0033AD'
-    },
-    {
-      name: 'Polkadot',
-      symbol: 'DOT',
-      balance: '25.789',
-      usdValue: '123.45',
-      changePercent: 0.89,
-      iconName: 'circle',
-      iconColor: '#E6007A'
-    },
-    {
-      name: 'Chainlink',
-      symbol: 'LINK',
-      balance: '156.23',
-      usdValue: '987.65',
-      changePercent: -3.21,
-      iconName: 'link',
-      iconColor: '#375BD2'
-    }
+const statusBarHeight =
+  Platform.OS === "android" ? Constants.statusBarHeight + 8 : 0;
+
+const { width } = Dimensions.get("window");
+function formatMarketCap(num, digits = 2) {
+  const lookup = [
+    { value: 1e12, symbol: "T" },
+    { value: 1e9, symbol: "B" },
+    { value: 1e6, symbol: "M" },
+    { value: 1e3, symbol: "K" },
+    { value: 1, symbol: "" },
   ];
 
-// Reusable Token List Item Component
-const TokenListItem = ({ 
-  name = "Loading...", 
-  symbol = "ERR", 
-  balance = "Err...", 
-  usdValue = "Err...", 
-  changePercent = "Err...", 
-  iconName = 'coins',
-  iconColor = '#4ECDC4',
-  onPress 
+  const absNum = Math.abs(num);
+  const item = lookup.find((i) => absNum >= i.value) || {
+    value: 0,
+    symbol: "",
+  };
+  const scaled = num / item.value;
+
+  return item.value === 0
+    ? num.toString()
+    : scaled.toFixed(digits).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") +
+        item.symbol;
+}
+const TokenListItem = ({
+  name = "Loading...",
+  symbol = "ERR",
+  balance = "Err...",
+  usdValue = "Err...",
+  changePercent = "Err...",
+  iconName = "coins",
+  iconColor = "#4ECDC4",
+  onPress,
 }) => {
   const [scaleValue] = useState(new Animated.Value(1));
 
@@ -95,7 +81,9 @@ const TokenListItem = ({
   const isPositive = changePercent >= 0;
 
   return (
-    <Animated.View style={[styles.tokenItem, { transform: [{ scale: scaleValue }] }]}>
+    <Animated.View
+      style={[styles.tokenItem, { transform: [{ scale: scaleValue }] }]}
+    >
       <TouchableOpacity
         style={styles.tokenContent}
         onPress={onPress}
@@ -104,24 +92,30 @@ const TokenListItem = ({
         activeOpacity={0.8}
       >
         <View style={styles.tokenLeft}>
-          <View style={[styles.tokenIcon, { backgroundColor: iconColor + '20' }]}>
-            <FontAwesome5 name={iconName} size={20} color={iconColor} />
+          <View style={[styles.tokenIcon]}>
+            <Image
+              source={{ uri: iconName }}
+              style={{ width: 28, height: 28, borderRadius: 14 }}
+            />
           </View>
           <View style={styles.tokenInfo}>
             <Text style={styles.tokenName}>{name}</Text>
-            <Text style={styles.tokenSymbol}>{symbol}</Text>
+            <Text style={styles.tokenSymbol}>{symbol.toUpperCase()}</Text>
           </View>
         </View>
-        
+
         <View style={styles.tokenRight}>
           <Text style={styles.tokenBalance}>{balance}</Text>
           <View style={styles.tokenValueRow}>
             <Text style={styles.tokenUsdValue}>${usdValue}</Text>
-            <Text style={[
-              styles.tokenChange, 
-              { color: isPositive ? '#4ECDC4' : '#FF6B6B' }
-            ]}>
-              {isPositive ? '+' : ''}{changePercent}%
+            <Text
+              style={[
+                styles.tokenChange,
+                { color: isPositive ? "#4ECDC4" : "#FF6B6B" },
+              ]}
+            >
+              {isPositive ? "+" : ""}
+              {changePercent}%
             </Text>
           </View>
         </View>
@@ -131,7 +125,7 @@ const TokenListItem = ({
 };
 
 // Action Button Component
-const ActionButton = ({ icon, label, onPress, color = '#16112B' }) => {
+const ActionButton = ({ icon, label, onPress, color = "#16112B" }) => {
   const [scaleValue] = useState(new Animated.Value(1));
 
   const handlePressIn = () => {
@@ -149,7 +143,9 @@ const ActionButton = ({ icon, label, onPress, color = '#16112B' }) => {
   };
 
   return (
-    <Animated.View style={[styles.actionButton, { transform: [{ scale: scaleValue }] }]}>
+    <Animated.View
+      style={[styles.actionButton, { transform: [{ scale: scaleValue }] }]}
+    >
       <TouchableOpacity
         style={[styles.actionButtonContent, { backgroundColor: color }]}
         onPress={onPress}
@@ -168,26 +164,60 @@ const ActionButton = ({ icon, label, onPress, color = '#16112B' }) => {
 // Main Homepage Component
 export default function Homepage({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
+  const [tokenData, setTokenData] = useState([]);
+  const [totalBalance, setBalance] = useState(null);
 
-  
-  const totalBalance = tokenData.reduce((sum, token) => sum + parseFloat(token.usdValue.replace(',', '')), 0);
+  const loadTokenData = async () => {
+    try {
+      const data = await fetchCoinList();
+      setTokenData(data);
+    } catch (error) {
+      console.error("Failed to fetch token data:", error);
+    }
+  };
+
+  useEffect(() => {
+    loadTokenData();
+  }, []);
+
+  const loadBalance = async () => {
+    try {
+      const data = await fetchBalance();
+      setBalance(parseFloat(data.balance) || 0);
+    } catch (error) {
+      console.error("Failed to fetch balance:", error);
+      setBalance(0);
+    }
+  };
+
+  useEffect(() => {
+    loadBalance();
+  }, []);
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await Promise.all([
+        loadTokenData(),
+        loadBalance(),
+      ]);
+    } catch (error) {
+      console.error('Failed to refresh homepage data:', error);
+    } finally {
       setRefreshing(false);
-    }, 1500);
+    }
   };
 
   return (
-    
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#0D0A19" />
-      
+
       {/* Header */}
       <View style={styles.header}>
-      <TouchableOpacity style={styles.logoButton} onPress={() => navigation.navigate('More')}>
+        <TouchableOpacity
+          style={styles.logoButton}
+          onPress={() => navigation.navigate("More")}
+        >
           <View style={styles.logoCircle}>
             <Image
               source={require("../assets/main_logo.png")}
@@ -198,26 +228,43 @@ export default function Homepage({ navigation }) {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Wallet</Text>
         <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.headerButton} onPress={() => navigation.navigate('QRscanner')}>
+          <TouchableOpacity
+            style={styles.headerButton}
+            onPress={() => navigation.navigate("QRscanner")}
+          >
             <Ionicons name="scan" size={24} color="#FFFFFF" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.headerButton} onPress={() => navigation.navigate('Search')}>
+          <TouchableOpacity
+            style={styles.headerButton}
+            onPress={() => navigation.navigate("Search")}
+          >
             <Ionicons name="search" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
       </View>
 
-      <ScrollView 
+      <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor="#4ECDC4"
+            colors={["#4ECDC4"]}
+          />
+        }
       >
         {/* Balance Section */}
         <View style={styles.balanceSection}>
           <View style={styles.balanceCard}>
             <Text style={styles.balanceLabel}>Total Balance</Text>
-            <Text style={styles.balanceAmount}>${totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })}</Text>
+            <Text style={styles.balanceAmount}>
+              
+              {(totalBalance || 0).toLocaleString("en-US", {
+                minimumFractionDigits: 5,
+              })} ETH
+            </Text>
             <View style={styles.balanceChange}>
               <FontAwesome5 name="arrow-up" size={12} color="#4ECDC4" />
               <Text style={styles.balanceChangeText}>+$156.78 (+2.45%)</Text>
@@ -227,29 +274,29 @@ export default function Homepage({ navigation }) {
 
         {/* Action Buttons */}
         <View style={styles.actionsSection}>
-          <ActionButton 
-            icon="shopping-cart" 
-            label="Buy" 
+          <ActionButton
+            icon="shopping-cart"
+            label="Buy"
             color="#16112B"
-            onPress={() => navigation.navigate('Buy')}
+            onPress={() => navigation.navigate("Buy")}
           />
-          <ActionButton 
-            icon="download" 
-            label="Receive" 
+          <ActionButton
+            icon="download"
+            label="Receive"
             color="#16112B"
-            onPress={() => navigation.navigate('Receive')}
+            onPress={() => navigation.navigate("Receive")}
           />
-          <ActionButton 
-            icon="paper-plane" 
-            label="Send" 
+          <ActionButton
+            icon="paper-plane"
+            label="Send"
             color="#16112B"
-            onPress={() => navigation.navigate('Send')}
+            onPress={() => navigation.navigate("Send")}
           />
-          <ActionButton 
-            icon="chart-line" 
-            label="Activity" 
+          <ActionButton
+            icon="chart-line"
+            label="Activity"
             color="#16112B"
-            onPress={() => navigation.navigate('Activity')}
+            onPress={() => navigation.navigate("Activity")}
           />
         </View>
 
@@ -257,57 +304,51 @@ export default function Homepage({ navigation }) {
         <View style={styles.tokenSection}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Token List</Text>
-            <TouchableOpacity onPress={() => console.log('See all tokens pressed')}>
+            <TouchableOpacity
+              onPress={() => console.log("See all tokens pressed")}
+            >
               <Text style={styles.seeAllText}>See All</Text>
             </TouchableOpacity>
           </View>
-          
-          <FlatList
-            data={tokenData}
-            keyExtractor={(item, index) => `${item.symbol}-${index}`}
-            renderItem={({ item }) => (
-              <TokenListItem
-                name={item.name}
-                symbol={item.symbol}
-                balance={item.balance}
-                usdValue={item.usdValue}
-                changePercent={item.changePercent}
-                iconName={item.iconName}
-                iconColor={item.iconColor}
-                onPress={() => console.log(`${item.name} pressed`)}
-              />
-            )}
-            ItemSeparatorComponent={() => (
-              <View style={styles.separator} />
-            )}
-            contentContainerStyle={styles.tokenList}
-          />
 
+          {tokenData.length === 0 ? (
+            <View style={styles.loadingContainer}>
+              <Text style={styles.loadingText}>Loading tokens...</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={tokenData}
+              keyExtractor={(item, index) => `${item.symbol}-${index}`}
+              renderItem={({ item,index }) => (
+                <TokenListItem
+                  name={item.name || "Unknown"}
+                  symbol={item.symbol || "N/A"}
+                  balance={item.balance || "0.00"}
+                  usdValue={formatMarketCap(
+                    (item.current_price || 0).toFixed(5),
+                  )}
+                  changePercent={
+                    item.price_change_percentage_24h?.toFixed(2) ?? 0
+                  }
+                  iconName={item.image || "https://via.placeholder.com/28"}
+                  iconColor="#FFA500"
+                  onPress={() =>
+                    navigation.navigate("CoinDetails", { coinId: item.id , 
+                      coinList:tokenData.map (token => token.id), 
+                      currentIndex: index})
+                  }
+                />
+              )}
+              ItemSeparatorComponent={() => <View style={styles.separator} />}
+              contentContainerStyle={styles.tokenList}
+            />
+          )}
         </View>
       </ScrollView>
 
-      {/* Bottom Navigation
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Homepage')}>
-          <Ionicons name="home" size={24} color="#7B68EE" />
-          <Text style={[styles.navLabel, { color: '#7B68EE' }]}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('TradeSwap')}>
-          <FontAwesome5 name="exchange-alt" size={20} color="#6B7280" />
-          <Text style={styles.navLabel}>Swap</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('RecentLogs')}>
-          <Ionicons name="time" size={24} color="#6B7280" />
-          <Text style={styles.navLabel}>Activity</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('MiscMain')}>
-          <Ionicons name="card" size={24} color="#6B7280" />
-          <Text style={styles.navLabel}>More</Text>
-        </TouchableOpacity>
-      </View> */}
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -315,11 +356,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.xl,
+    paddingTop: statusBarHeight,
     paddingBottom: Spacing.xl,
     backgroundColor: Colors.background,
   },
@@ -332,7 +373,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   headerRight: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   scrollView: {
     flex: 1,
@@ -345,7 +386,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.cardBackground,
     borderRadius: 20,
     padding: Spacing.massive,
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1,
     borderColor: Colors.border,
   },
@@ -361,8 +402,8 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   balanceChange: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   balanceChangeText: {
     fontSize: FontSizes.base,
@@ -371,8 +412,8 @@ const styles = StyleSheet.create({
     fontWeight: FontWeights.medium,
   },
   actionsSection: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingHorizontal: Spacing.xl,
     marginBottom: Spacing.massive,
   },
@@ -381,7 +422,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   actionButtonContent: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: Spacing.lg,
     borderRadius: 16,
     borderWidth: 1,
@@ -392,8 +433,8 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: Spacing.md,
     backgroundColor: Colors.accent,
   },
@@ -407,9 +448,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: Spacing.lg,
   },
   sectionTitle: {
@@ -427,31 +468,31 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
     borderColor: Colors.border,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   separator: {
     height: 1,
     backgroundColor: Colors.border,
   },
   tokenContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: Spacing.lg,
   },
   tokenLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     flex: 1,
   },
   tokenIcon: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: Spacing.lg,
-    backgroundColor: Colors.accent + '20',
+    backgroundColor: Colors.accent + "20",
   },
   tokenInfo: {
     flex: 1,
@@ -467,7 +508,7 @@ const styles = StyleSheet.create({
     color: Colors.gray,
   },
   tokenRight: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
   },
   tokenBalance: {
     fontSize: FontSizes.md,
@@ -476,8 +517,8 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   tokenValueRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   tokenUsdValue: {
     fontSize: FontSizes.base,
@@ -489,11 +530,11 @@ const styles = StyleSheet.create({
     fontWeight: FontWeights.medium,
   },
   bottomNav: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    flexDirection: 'row',
+    flexDirection: "row",
     backgroundColor: Colors.cardBackground,
     paddingVertical: 12,
     paddingBottom: 25,
@@ -502,7 +543,7 @@ const styles = StyleSheet.create({
   },
   navItem: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: 8,
   },
   navLabel: {
@@ -521,12 +562,22 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.cardBackground,
     borderWidth: 1,
     borderColor: Colors.border,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerLogo: {
     width: 24,
     height: 24,
+  },
+  loadingContainer: {
+    padding: Spacing.xl,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loadingText: {
+    color: Colors.white,
+    fontSize: FontSizes.lg,
+    fontWeight: FontWeights.medium,
   },
 });
 

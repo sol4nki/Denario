@@ -179,7 +179,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   content: {
-    // paddingHorizontal: Spacing.giant,
     paddingHorizontal: '5%',
     marginTop: 260,
     alignItems: 'stretch',
@@ -288,7 +287,7 @@ const styles = StyleSheet.create({
 
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -7,7 +7,6 @@ import RecoveryPhraseScreen from './RecoveryPhraseScreen';
 import SuccessScreen from './SuccessScreen';
 import LoginScreen from './LoginScreen.js'
 import TabNavigator from '../TabNavigator.js';
-// import RecoveryHelp from './RecoveryHelp';
 
 const Stack = createStackNavigator();
 
@@ -27,7 +26,6 @@ export default function LoginCompilation() {
         <Stack.Screen name="RecoveryPhrase" component={RecoveryPhraseScreen} />
         <Stack.Screen name="Success" component={SuccessScreen} />
         <Stack.Screen name="TabNavigator" component={TabNavigator}/>
-        {/* <Stack.Screen name="RecoveryHelp" component={RecoveryHelp}/> */}
       </Stack.Navigator>
     </NavigationIndependentTree>
   );
