@@ -15,7 +15,7 @@ We are Denario, a feature rich wallet application focused on creating secure, fa
 
 ---
 
-## Demo Video (click on the thumbnail)
+## Demo Video (click on the image)
 
 
 [![Watch here](maxresdefault.webp)](https://vimeo.com/1100429386)
