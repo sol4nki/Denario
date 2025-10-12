@@ -1,6 +1,12 @@
 <!-- <p align="center">
   <img src="https://media.discordapp.net/attachments/1389703620777476250/1392966500465508383/color_changed_logo.gif?ex=687174a5&is=68702325&hm=20e56d137b72b8f48f0e282fca0d22f66b0fe6c17f72649b575fe1036b8a8895&=" width="128" height="128" />
 </p> -->
+<p align="center">
+  <a href="https://sol4nki.github.io/projects/denario" target="_blank">
+    <img src="./assets/color_changed_logo.gif" alt="denario_" width="20%"/>
+  </a>
+</p>
+
 # Denario
 
 Secure. Simple. Yours.
