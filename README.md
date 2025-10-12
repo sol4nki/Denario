@@ -15,7 +15,7 @@ Secure. Simple. Yours.
 
 ## 1. Overview/Introduction:
 
-We are Denario, a feature rich wallet application focused on creating secure, fast and simple crypto wallet solutions for android and ios all done natively in react using ether.js. Currently deployed on Sepolia Eth Testnet. Features include creating, importing wallets, showing token balances in real time, swapping/wrapping tokens, for security purposes user can access all login logs, transaction hashes, receiver addresses in one click, you can send, receive, scan, compare and biometrically verify. 
+We are Denario [(Website)](https://github.com/sol4nki/projects/denario), a feature rich wallet application focused on creating secure, fast and simple crypto wallet solutions for android and ios all done natively in react using ether.js. Currently deployed on Sepolia Eth Testnet. Features include creating, importing wallets, showing token balances in real time, swapping/wrapping tokens, for security purposes user can access all login logs, transaction hashes, receiver addresses in one click, you can send, receive, scan, compare and biometrically verify. 
 
 — Currently deployed on Sepolia Eth Testnet, our platform offers features including creating, importing wallets, showing token balances in real time, swapping/wrapping tokens, send and receive tokens, scan wallet QR, get all relevant token market data and more. We use a combination of locally encrypted secure storage, biometric authentication and Firebase-backed server protection to safeguard sensitive data with additional precautions against scam/phishing as well. Users can manage their wallets, monitor the market and perform transactions securely and confidently.
 
